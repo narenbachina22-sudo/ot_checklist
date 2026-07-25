@@ -13,6 +13,8 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedChecklistNewRouteImport } from './routes/_authenticated/checklist.new'
+import { Route as AuthenticatedChecklistIdRouteImport } from './routes/_authenticated/checklist.$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -33,16 +35,32 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedChecklistNewRoute =
+  AuthenticatedChecklistNewRouteImport.update({
+    id: '/checklist/new',
+    path: '/checklist/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedChecklistIdRoute =
+  AuthenticatedChecklistIdRouteImport.update({
+    id: '/checklist/$id',
+    path: '/checklist/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/checklist/$id': typeof AuthenticatedChecklistIdRoute
+  '/checklist/new': typeof AuthenticatedChecklistNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/checklist/$id': typeof AuthenticatedChecklistIdRoute
+  '/checklist/new': typeof AuthenticatedChecklistNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -50,18 +68,22 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/checklist/$id': typeof AuthenticatedChecklistIdRoute
+  '/_authenticated/checklist/new': typeof AuthenticatedChecklistNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard'
+  fullPaths: '/' | '/auth' | '/dashboard' | '/checklist/$id' | '/checklist/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard'
+  to: '/' | '/auth' | '/dashboard' | '/checklist/$id' | '/checklist/new'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/checklist/$id'
+    | '/_authenticated/checklist/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,15 +122,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/checklist/new': {
+      id: '/_authenticated/checklist/new'
+      path: '/checklist/new'
+      fullPath: '/checklist/new'
+      preLoaderRoute: typeof AuthenticatedChecklistNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/checklist/$id': {
+      id: '/_authenticated/checklist/$id'
+      path: '/checklist/$id'
+      fullPath: '/checklist/$id'
+      preLoaderRoute: typeof AuthenticatedChecklistIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedChecklistIdRoute: typeof AuthenticatedChecklistIdRoute
+  AuthenticatedChecklistNewRoute: typeof AuthenticatedChecklistNewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedChecklistIdRoute: AuthenticatedChecklistIdRoute,
+  AuthenticatedChecklistNewRoute: AuthenticatedChecklistNewRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -122,13 +162,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
