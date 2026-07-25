@@ -1,9 +1,141 @@
-import { useState } from "react";
+// import { useState } from "react";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import { Checkbox } from "@/components/ui/checkbox";
+// import { CHECKLIST_SECTIONS, type ChecklistData, type FieldDef } from "@/lib/checklist-schema";
+
+// interface Props {
+//   value: ChecklistData;
+//   onChange: (next: ChecklistData) => void;
+//   readOnly?: boolean;
+// }
+
+// export function ChecklistForm({ value, onChange, readOnly = false }: Props) {
+//   function set(key: string, v: string | boolean) {
+//     onChange({ ...value, [key]: v });
+//   }
+
+//   return (
+//     <div className="space-y-5">
+//       {CHECKLIST_SECTIONS.map((section) => (
+//         <Card key={section.key}>
+//           <CardHeader className="pb-3">
+//             <CardTitle className="text-base">{section.title}</CardTitle>
+//           </CardHeader>
+//           <CardContent className="grid gap-4 sm:grid-cols-2">
+//             {section.fields.map((f) => (
+//               <FieldRow key={f.key} field={f} value={value} set={set} readOnly={readOnly} />
+//             ))}
+//           </CardContent>
+//         </Card>
+//       ))}
+//     </div>
+//   );
+// }
+
+// function FieldRow({
+//   field,
+//   value,
+//   set,
+//   readOnly,
+// }: {
+//   field: FieldDef;
+//   value: ChecklistData;
+//   set: (k: string, v: string | boolean) => void;
+//   readOnly: boolean;
+// }) {
+//   const v = value[field.key];
+
+//   if (field.type === "checkbox") {
+//     return (
+//       <label className="flex items-center gap-2 text-sm">
+//         <Checkbox
+//           checked={Boolean(v)}
+//           onCheckedChange={(c) => set(field.key, Boolean(c))}
+//           disabled={readOnly}
+//         />
+//         <span>{field.label}</span>
+//       </label>
+//     );
+//   }
+
+//   if (field.type === "yesno") {
+//     return (
+//       <div className="space-y-1">
+//         <Label className="text-sm">{field.label}</Label>
+//         <div className="flex gap-4 text-sm">
+//           {["Yes", "No"].map((opt) => (
+//             <label key={opt} className="flex items-center gap-1.5">
+//               <input
+//                 type="radio"
+//                 name={field.key}
+//                 checked={v === opt}
+//                 onChange={() => set(field.key, opt)}
+//                 disabled={readOnly}
+//               />
+//               {opt}
+//             </label>
+//           ))}
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   if (field.type === "checkbox_with_text") {
+//     const checkedKey = `${field.key}__checked`;
+//     return (
+//       <div className="space-y-1">
+//         <label className="flex items-center gap-2 text-sm">
+//           <Checkbox
+//             checked={Boolean(value[checkedKey])}
+//             onCheckedChange={(c) => set(checkedKey, Boolean(c))}
+//             disabled={readOnly}
+//           />
+//           <span>{field.label}</span>
+//         </label>
+//         <Input
+//           value={typeof v === "string" ? v : ""}
+//           onChange={(e) => set(field.key, e.target.value)}
+//           placeholder={field.placeholder ?? "Details"}
+//           disabled={readOnly}
+//         />
+//       </div>
+//     );
+//   }
+
+//   // text
+//   return (
+//     <div className="space-y-1">
+//       <Label className="text-sm" htmlFor={field.key}>
+//         {field.label}
+//       </Label>
+//       <Input
+//         id={field.key}
+//         value={typeof v === "string" ? v : ""}
+//         onChange={(e) => set(field.key, e.target.value)}
+//         placeholder={field.placeholder}
+//         disabled={readOnly}
+//       />
+//     </div>
+//   );
+// }
+
+// export function useChecklistState(initial: ChecklistData) {
+//   return useState<ChecklistData>(initial);
+// }
+
+
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CHECKLIST_SECTIONS, type ChecklistData, type FieldDef } from "@/lib/checklist-schema";
+import {
+  CHECKLIST_SECTIONS,
+  type ChecklistData,
+  type FieldDef,
+} from "@/lib/checklist-schema";
 
 interface Props {
   value: ChecklistData;
@@ -11,9 +143,16 @@ interface Props {
   readOnly?: boolean;
 }
 
-export function ChecklistForm({ value, onChange, readOnly = false }: Props) {
+export function ChecklistForm({
+  value,
+  onChange,
+  readOnly = false,
+}: Props) {
   function set(key: string, v: string | boolean) {
-    onChange({ ...value, [key]: v });
+    onChange({
+      ...value,
+      [key]: v,
+    });
   }
 
   return (
@@ -21,11 +160,20 @@ export function ChecklistForm({ value, onChange, readOnly = false }: Props) {
       {CHECKLIST_SECTIONS.map((section) => (
         <Card key={section.key}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base">{section.title}</CardTitle>
+            <CardTitle className="text-base">
+              {section.title}
+            </CardTitle>
           </CardHeader>
+
           <CardContent className="grid gap-4 sm:grid-cols-2">
-            {section.fields.map((f) => (
-              <FieldRow key={f.key} field={f} value={value} set={set} readOnly={readOnly} />
+            {section.fields.map((field) => (
+              <FieldRow
+                key={field.key}
+                field={field}
+                value={value}
+                set={set}
+                readOnly={readOnly}
+              />
             ))}
           </CardContent>
         </Card>
@@ -47,6 +195,10 @@ function FieldRow({
 }) {
   const v = value[field.key];
 
+  // -------------------------
+  // Checkbox
+  // -------------------------
+
   if (field.type === "checkbox") {
     return (
       <label className="flex items-center gap-2 text-sm">
@@ -60,13 +212,21 @@ function FieldRow({
     );
   }
 
+  // -------------------------
+  // Yes / No
+  // -------------------------
+
   if (field.type === "yesno") {
     return (
       <div className="space-y-1">
         <Label className="text-sm">{field.label}</Label>
+
         <div className="flex gap-4 text-sm">
           {["Yes", "No"].map((opt) => (
-            <label key={opt} className="flex items-center gap-1.5">
+            <label
+              key={opt}
+              className="flex items-center gap-1.5"
+            >
               <input
                 type="radio"
                 name={field.key}
@@ -82,38 +242,112 @@ function FieldRow({
     );
   }
 
+  // -------------------------
+  // Checkbox + Text
+  // -------------------------
+
   if (field.type === "checkbox_with_text") {
     const checkedKey = `${field.key}__checked`;
+    const checked = Boolean(value[checkedKey]);
+
     return (
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label className="flex items-center gap-2 text-sm">
           <Checkbox
-            checked={Boolean(value[checkedKey])}
-            onCheckedChange={(c) => set(checkedKey, Boolean(c))}
+            checked={checked}
+            onCheckedChange={(c) =>
+              set(checkedKey, Boolean(c))
+            }
             disabled={readOnly}
           />
+
           <span>{field.label}</span>
         </label>
-        <Input
-          value={typeof v === "string" ? v : ""}
-          onChange={(e) => set(field.key, e.target.value)}
-          placeholder={field.placeholder ?? "Details"}
-          disabled={readOnly}
-        />
+
+        {checked && (
+          <Input
+            value={typeof v === "string" ? v : ""}
+            onChange={(e) =>
+              set(field.key, e.target.value)
+            }
+            placeholder={
+              field.placeholder ?? "Enter details"
+            }
+            disabled={readOnly}
+          />
+        )}
       </div>
     );
   }
 
-  // text
+  // -------------------------
+  // Select
+  // -------------------------
+
+  if (field.type === "select") {
+    return (
+      <div className="space-y-1">
+        <Label>{field.label}</Label>
+
+        <select
+          className="flex h-10 w-full rounded-md border bg-background px-3 text-sm"
+          value={typeof v === "string" ? v : ""}
+          onChange={(e) =>
+            set(field.key, e.target.value)
+          }
+          disabled={readOnly}
+        >
+          <option value="">Select...</option>
+
+          {field.options?.map((option) => (
+            <option
+              key={option}
+              value={option}
+            >
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
+  // -------------------------
+  // Date Time
+  // -------------------------
+
+  if (field.type === "datetime") {
   return (
     <div className="space-y-1">
-      <Label className="text-sm" htmlFor={field.key}>
+      <Label htmlFor={field.key}>{field.label}</Label>
+
+      <Input
+        id={field.key}
+        type="datetime-local"
+        value={typeof v === "string" ? v : ""}
+        onChange={(e) => set(field.key, e.target.value)}
+        disabled={readOnly}
+      />
+    </div>
+  );
+}
+
+  // -------------------------
+  // Text
+  // -------------------------
+
+  return (
+    <div className="space-y-1">
+      <Label htmlFor={field.key}>
         {field.label}
       </Label>
+
       <Input
         id={field.key}
         value={typeof v === "string" ? v : ""}
-        onChange={(e) => set(field.key, e.target.value)}
+        onChange={(e) =>
+          set(field.key, e.target.value)
+        }
         placeholder={field.placeholder}
         disabled={readOnly}
       />
@@ -121,6 +355,8 @@ function FieldRow({
   );
 }
 
-export function useChecklistState(initial: ChecklistData) {
-  return useState<ChecklistData>(initial);
+export function useChecklistState(
+  initial: ChecklistData
+) {
+  return useState(initial);
 }
