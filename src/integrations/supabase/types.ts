@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      checklists: {
+        Row: {
+          created_at: string
+          created_by: string
+          created_by_name: string
+          data: Json
+          id: string
+          patient_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          created_by_name: string
+          data?: Json
+          id?: string
+          patient_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          created_by_name?: string
+          data?: Json
+          id?: string
+          patient_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           can_use_ot_handover_checklist: boolean | null
