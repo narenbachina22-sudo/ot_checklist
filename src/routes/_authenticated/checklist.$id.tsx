@@ -184,7 +184,7 @@ function ViewChecklist() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Button variant="ghost" size="sm" asChild>
           <Link to="/dashboard">
             <ChevronLeft className="mr-1 h-4 w-4" />
@@ -193,7 +193,7 @@ function ViewChecklist() {
         </Button>
 
         {!isLoading && data && (
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {editing ? (
               <>
                 <Button variant="outline" onClick={handleCancel} disabled={saving}>

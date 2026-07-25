@@ -290,7 +290,7 @@ function FieldRow({
         <Label>{field.label}</Label>
 
         <select
-          className="flex h-10 w-full rounded-md border bg-background px-3 text-sm"
+          className="flex h-10 w-full rounded-md border bg-background px-3 text-base md:text-sm"
           value={typeof v === "string" ? v : ""}
           onChange={(e) =>
             set(field.key, e.target.value)
