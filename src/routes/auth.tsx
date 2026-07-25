@@ -12,7 +12,7 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getUser();
-    if (data.user) throw redirect({ to: "/dashboard" });
+    if (data.user) throw redirect({ to: "/checklist" });
   },
   head: () => ({
     meta: [
@@ -36,7 +36,7 @@ function AuthPage() {
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_IN") navigate({ to: "/dashboard", replace: true });
+      if (event === "SIGNED_IN") navigate({ to: "/checklist", replace: true });
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
@@ -51,7 +51,7 @@ function AuthPage() {
       setError(error.message);
       return;
     }
-    navigate({ to: "/dashboard", replace: true });
+    navigate({ to: "/checklist", replace: true });
   }
 
   return (

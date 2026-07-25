@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedConsultationsRouteImport } from './routes/_authenticated/consultations'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedChecklistIndexRouteImport } from './routes/_authenticated/checklist.index'
 import { Route as AuthenticatedChecklistIdRouteImport } from './routes/_authenticated/checklist.$id'
 import { Route as AuthenticatedChecklistNewRouteImport } from './routes/_authenticated/checklist.new'
 
@@ -30,11 +32,23 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedConsultationsRoute =
+  AuthenticatedConsultationsRouteImport.update({
+    id: '/consultations',
+    path: '/consultations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedChecklistIndexRoute =
+  AuthenticatedChecklistIndexRouteImport.update({
+    id: '/checklist/',
+    path: '/checklist/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedChecklistIdRoute =
   AuthenticatedChecklistIdRouteImport.update({
     id: '/checklist/$id',
@@ -51,39 +65,61 @@ const AuthenticatedChecklistNewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/consultations': typeof AuthenticatedConsultationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/checklist/new': typeof AuthenticatedChecklistNewRoute
+  '/checklist/': typeof AuthenticatedChecklistIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/consultations': typeof AuthenticatedConsultationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/checklist/new': typeof AuthenticatedChecklistNewRoute
+  '/checklist': typeof AuthenticatedChecklistIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/consultations': typeof AuthenticatedConsultationsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/_authenticated/checklist/new': typeof AuthenticatedChecklistNewRoute
+  '/_authenticated/checklist/': typeof AuthenticatedChecklistIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/checklist/$id' | '/checklist/new'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/consultations'
+    | '/dashboard'
+    | '/checklist/$id'
+    | '/checklist/new'
+    | '/checklist/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/checklist/$id' | '/checklist/new'
+  to:
+    | '/'
+    | '/auth'
+    | '/consultations'
+    | '/dashboard'
+    | '/checklist/$id'
+    | '/checklist/new'
+    | '/checklist'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/consultations'
     | '/_authenticated/dashboard'
     | '/_authenticated/checklist/$id'
     | '/_authenticated/checklist/new'
+    | '/_authenticated/checklist/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -115,11 +151,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/consultations': {
+      id: '/_authenticated/consultations'
+      path: '/consultations'
+      fullPath: '/consultations'
+      preLoaderRoute: typeof AuthenticatedConsultationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/checklist/': {
+      id: '/_authenticated/checklist/'
+      path: '/checklist'
+      fullPath: '/checklist/'
+      preLoaderRoute: typeof AuthenticatedChecklistIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/checklist/$id': {
@@ -140,15 +190,19 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedConsultationsRoute: typeof AuthenticatedConsultationsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedChecklistIdRoute: typeof AuthenticatedChecklistIdRoute
   AuthenticatedChecklistNewRoute: typeof AuthenticatedChecklistNewRoute
+  AuthenticatedChecklistIndexRoute: typeof AuthenticatedChecklistIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedConsultationsRoute: AuthenticatedConsultationsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedChecklistIdRoute: AuthenticatedChecklistIdRoute,
   AuthenticatedChecklistNewRoute: AuthenticatedChecklistNewRoute,
+  AuthenticatedChecklistIndexRoute: AuthenticatedChecklistIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

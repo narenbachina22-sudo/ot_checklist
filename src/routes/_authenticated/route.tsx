@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShieldAlert, Loader2, LogOut, Stethoscope } from "lucide-react";
+import { ShieldAlert, Loader2, LogOut } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 interface GateData {
   fullName: string;
@@ -87,27 +88,8 @@ function AuthenticatedLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary">
-              <Stethoscope className="h-4 w-4" />
-            </div>
-            <div className="leading-tight">
-              <p className="text-sm font-semibold">OT Handover Checklist</p>
-              <p className="text-xs text-muted-foreground">{gate.fullName}</p>
-            </div>
-          </div>
-          <Button variant="ghost" size="sm" onClick={handleSignOut} disabled={signingOut}>
-            {signingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogOut className="mr-2 h-4 w-4" />}
-            Sign out
-          </Button>
-        </div>
-      </header>
-      <main className="mx-auto max-w-5xl px-4 py-6">
-        <Outlet />
-      </main>
-    </div>
+    <AppLayout userName={gate.fullName} onSignOut={handleSignOut} signingOut={signingOut}>
+      <Outlet />
+    </AppLayout>
   );
 }
