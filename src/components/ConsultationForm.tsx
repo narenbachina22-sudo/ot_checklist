@@ -1,3 +1,140 @@
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import { Textarea } from "@/components/ui/textarea";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+// import { cn } from "@/lib/utils";
+// import type { ConsultationFormErrors, ConsultationFormValues } from "@/lib/consultation";
+
+// interface Props {
+//   value: ConsultationFormValues;
+//   onChange: (next: ConsultationFormValues) => void;
+//   errors?: ConsultationFormErrors;
+//   readOnly?: boolean;
+// }
+
+// const SEX_OPTIONS = ["Male", "Female", "Other"];
+
+// export function ConsultationForm({ value, onChange, errors, readOnly = false }: Props) {
+//   function set<K extends keyof ConsultationFormValues>(key: K, v: ConsultationFormValues[K]) {
+//     onChange({ ...value, [key]: v });
+//   }
+
+//   return (
+//     <Card>
+//       <CardHeader className="pb-3">
+//         <CardTitle className="text-base">Consultation details</CardTitle>
+//       </CardHeader>
+
+//       <CardContent className="grid gap-4 sm:grid-cols-2">
+//         <div className="space-y-1">
+//           <Label htmlFor="consultation_date">Consultation Date</Label>
+//           <Input
+//             id="consultation_date"
+//             type="date"
+//             value={value.consultation_date}
+//             onChange={(e) => set("consultation_date", e.target.value)}
+//             disabled={readOnly}
+//             className={cn(errors?.consultation_date && "border-red-500 ring-1 ring-red-500")}
+//           />
+//           {errors?.consultation_date && (
+//             <p className="text-xs font-medium text-red-600">{errors.consultation_date}</p>
+//           )}
+//         </div>
+
+//         <div className="space-y-1">
+//           <Label htmlFor="patient_name">Patient Name</Label>
+//           <Input
+//             id="patient_name"
+//             value={value.patient_name}
+//             onChange={(e) => set("patient_name", e.target.value)}
+//             placeholder="Enter patient name"
+//             disabled={readOnly}
+//             className={cn(errors?.patient_name && "border-red-500 ring-1 ring-red-500")}
+//           />
+//           {errors?.patient_name && (
+//             <p className="text-xs font-medium text-red-600">{errors.patient_name}</p>
+//           )}
+//         </div>
+
+//         <div className="space-y-1">
+//           <Label htmlFor="age">Age</Label>
+//           <Input
+//             id="age"
+//             type="number"
+//             min="0"
+//             value={value.age}
+//             onChange={(e) => set("age", e.target.value)}
+//             placeholder="Age"
+//             disabled={readOnly}
+//           />
+//         </div>
+
+//         <div className="space-y-1">
+//           <Label htmlFor="sex">Sex</Label>
+//           <Select
+//             value={value.sex || undefined}
+//             onValueChange={(v) => set("sex", v)}
+//             disabled={readOnly}
+//           >
+//             <SelectTrigger id="sex">
+//               <SelectValue placeholder="Select…" />
+//             </SelectTrigger>
+//             <SelectContent>
+//               {SEX_OPTIONS.map((opt) => (
+//                 <SelectItem key={opt} value={opt}>
+//                   {opt}
+//                 </SelectItem>
+//               ))}
+//             </SelectContent>
+//           </Select>
+//         </div>
+
+//         <div className="space-y-1">
+//           <Label htmlFor="phone">Phone</Label>
+//           <Input
+//             id="phone"
+//             type="tel"
+//             value={value.phone}
+//             onChange={(e) => set("phone", e.target.value)}
+//             placeholder="Phone number"
+//             disabled={readOnly}
+//           />
+//         </div>
+
+//         <div className="space-y-1">
+//           <Label htmlFor="location">Location</Label>
+//           <Input
+//             id="location"
+//             value={value.location}
+//             onChange={(e) => set("location", e.target.value)}
+//             placeholder="Ward / address"
+//             disabled={readOnly}
+//           />
+//         </div>
+
+//         <div className="space-y-1 sm:col-span-2">
+//           <Label htmlFor="notes">Notes</Label>
+//           <Textarea
+//             id="notes"
+//             value={value.notes}
+//             onChange={(e) => set("notes", e.target.value)}
+//             placeholder="Consultation notes…"
+//             disabled={readOnly}
+//             className="min-h-[160px]"
+//           />
+//         </div>
+//       </CardContent>
+//     </Card>
+//   );
+// }
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +147,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import type { ConsultationFormErrors, ConsultationFormValues } from "@/lib/consultation";
+import {
+  PAYMENT_TYPES,
+  type ConsultationFormErrors,
+  type ConsultationFormValues,
+} from "@/lib/consultation";
+import { ConsultationRoomOptions } from "@/components/ConsultationRoomOptions";
 
 interface Props {
   value: ConsultationFormValues;
@@ -27,110 +169,198 @@ export function ConsultationForm({ value, onChange, errors, readOnly = false }: 
   }
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">Consultation details</CardTitle>
-      </CardHeader>
+    <div className="space-y-4">
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Consultation details</CardTitle>
+        </CardHeader>
 
-      <CardContent className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1">
-          <Label htmlFor="consultation_date">Consultation Date</Label>
-          <Input
-            id="consultation_date"
-            type="date"
-            value={value.consultation_date}
-            onChange={(e) => set("consultation_date", e.target.value)}
-            disabled={readOnly}
-            className={cn(errors?.consultation_date && "border-red-500 ring-1 ring-red-500")}
+        <CardContent className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-1">
+            <Label htmlFor="consultation_date">Consultation Date</Label>
+            <Input
+              id="consultation_date"
+              type="date"
+              value={value.consultation_date}
+              onChange={(e) => set("consultation_date", e.target.value)}
+              disabled={readOnly}
+              className={cn(errors?.consultation_date && "border-red-500 ring-1 ring-red-500")}
+            />
+            {errors?.consultation_date && (
+              <p className="text-xs font-medium text-red-600">{errors.consultation_date}</p>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="patient_name">Patient Name</Label>
+            <Input
+              id="patient_name"
+              value={value.patient_name}
+              onChange={(e) => set("patient_name", e.target.value)}
+              placeholder="Enter patient name"
+              disabled={readOnly}
+              className={cn(errors?.patient_name && "border-red-500 ring-1 ring-red-500")}
+            />
+            {errors?.patient_name && (
+              <p className="text-xs font-medium text-red-600">{errors.patient_name}</p>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="age">Age</Label>
+            <Input
+              id="age"
+              type="number"
+              min="0"
+              value={value.age}
+              onChange={(e) => set("age", e.target.value)}
+              placeholder="Age"
+              disabled={readOnly}
+            />
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="sex">Sex</Label>
+            <Select
+              value={value.sex || undefined}
+              onValueChange={(v) => set("sex", v)}
+              disabled={readOnly}
+            >
+              <SelectTrigger id="sex">
+                <SelectValue placeholder="Select…" />
+              </SelectTrigger>
+              <SelectContent>
+                {SEX_OPTIONS.map((opt) => (
+                  <SelectItem key={opt} value={opt}>
+                    {opt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="phone">Phone</Label>
+            <Input
+              id="phone"
+              type="tel"
+              value={value.phone}
+              onChange={(e) => set("phone", e.target.value)}
+              placeholder="Phone number"
+              disabled={readOnly}
+            />
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="location">Location</Label>
+            <Input
+              id="location"
+              value={value.location}
+              onChange={(e) => set("location", e.target.value)}
+              placeholder="Ward / address"
+              disabled={readOnly}
+            />
+          </div>
+
+          <div className="space-y-1 sm:col-span-2">
+            <Label htmlFor="surgery_name">Name of Surgery</Label>
+            <Input
+              id="surgery_name"
+              value={value.surgery_name}
+              onChange={(e) => set("surgery_name", e.target.value)}
+              placeholder="e.g. Appendectomy"
+              disabled={readOnly}
+            />
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="amount">Amount (₹)</Label>
+            <Input
+              id="amount"
+              type="text"
+              inputMode="decimal"
+              value={value.amount}
+              onChange={(e) => set("amount", e.target.value)}
+              placeholder="0"
+              disabled={readOnly}
+              className={cn(errors?.amount && "border-red-500 ring-1 ring-red-500")}
+            />
+            {errors?.amount && (
+              <p className="text-xs font-medium text-red-600">{errors.amount}</p>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="payment_type">Payment Type</Label>
+            <Select
+              value={value.payment_type || undefined}
+              onValueChange={(v) => set("payment_type", v)}
+              disabled={readOnly}
+            >
+              <SelectTrigger id="payment_type">
+                <SelectValue placeholder="Select…" />
+              </SelectTrigger>
+              <SelectContent>
+                {PAYMENT_TYPES.map((p) => (
+                  <SelectItem key={p} value={p}>
+                    {p}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="cmrf"
+              className={cn(
+                "flex items-center gap-2 text-sm font-medium",
+                readOnly ? "cursor-default" : "cursor-pointer",
+              )}
+            >
+              <input
+                id="cmrf"
+                type="checkbox"
+                checked={value.cmrf}
+                disabled={readOnly}
+                onChange={(e) => set("cmrf", e.target.checked)}
+                className="h-4 w-4 rounded border-input accent-primary"
+              />
+              CMRF
+              <span className="font-normal text-muted-foreground">
+                (Chief Minister&apos;s Relief Fund)
+              </span>
+            </label>
+          </div>
+
+          <div className="space-y-1 sm:col-span-2">
+            <Label htmlFor="notes">Notes</Label>
+            <Textarea
+              id="notes"
+              value={value.notes}
+              onChange={(e) => set("notes", e.target.value)}
+              placeholder="Consultation notes…"
+              disabled={readOnly}
+              className="min-h-[160px]"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Room options &amp; estimate</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ConsultationRoomOptions
+            options={value.room_options}
+            selectedId={value.selected_option_id}
+            onOptionsChange={(next) => set("room_options", next)}
+            onSelectedChange={(id) => set("selected_option_id", id)}
+            readOnly={readOnly}
           />
-          {errors?.consultation_date && (
-            <p className="text-xs font-medium text-red-600">{errors.consultation_date}</p>
-          )}
-        </div>
-
-        <div className="space-y-1">
-          <Label htmlFor="patient_name">Patient Name</Label>
-          <Input
-            id="patient_name"
-            value={value.patient_name}
-            onChange={(e) => set("patient_name", e.target.value)}
-            placeholder="Enter patient name"
-            disabled={readOnly}
-            className={cn(errors?.patient_name && "border-red-500 ring-1 ring-red-500")}
-          />
-          {errors?.patient_name && (
-            <p className="text-xs font-medium text-red-600">{errors.patient_name}</p>
-          )}
-        </div>
-
-        <div className="space-y-1">
-          <Label htmlFor="age">Age</Label>
-          <Input
-            id="age"
-            type="number"
-            min="0"
-            value={value.age}
-            onChange={(e) => set("age", e.target.value)}
-            placeholder="Age"
-            disabled={readOnly}
-          />
-        </div>
-
-        <div className="space-y-1">
-          <Label htmlFor="sex">Sex</Label>
-          <Select
-            value={value.sex || undefined}
-            onValueChange={(v) => set("sex", v)}
-            disabled={readOnly}
-          >
-            <SelectTrigger id="sex">
-              <SelectValue placeholder="Select…" />
-            </SelectTrigger>
-            <SelectContent>
-              {SEX_OPTIONS.map((opt) => (
-                <SelectItem key={opt} value={opt}>
-                  {opt}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1">
-          <Label htmlFor="phone">Phone</Label>
-          <Input
-            id="phone"
-            type="tel"
-            value={value.phone}
-            onChange={(e) => set("phone", e.target.value)}
-            placeholder="Phone number"
-            disabled={readOnly}
-          />
-        </div>
-
-        <div className="space-y-1">
-          <Label htmlFor="location">Location</Label>
-          <Input
-            id="location"
-            value={value.location}
-            onChange={(e) => set("location", e.target.value)}
-            placeholder="Ward / address"
-            disabled={readOnly}
-          />
-        </div>
-
-        <div className="space-y-1 sm:col-span-2">
-          <Label htmlFor="notes">Notes</Label>
-          <Textarea
-            id="notes"
-            value={value.notes}
-            onChange={(e) => set("notes", e.target.value)}
-            placeholder="Consultation notes…"
-            disabled={readOnly}
-            className="min-h-[160px]"
-          />
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
