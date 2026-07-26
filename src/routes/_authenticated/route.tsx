@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated")({
     const { data: profile } = await supabase
       .from("profiles")
       .select(
-        "id, full_name, role, hospital_id, can_use_ot_handover_checklist, can_consultations, created_at",
+        "id, full_name, role, hospital_id, can_use_ot_handover_checklist, can_consultations, can_edd, created_at",
       )
       .eq("id", data.user.id)
       .maybeSingle();
@@ -33,7 +33,11 @@ export const Route = createFileRoute("/_authenticated")({
       gate: {
         fullName: profile?.full_name ?? data.user.email ?? "Staff",
         profile: profile ?? null,
-        authorized: Boolean(profile?.can_use_ot_handover_checklist || profile?.can_consultations),
+        authorized: Boolean(
+          profile?.can_use_ot_handover_checklist ||
+            profile?.can_consultations ||
+            profile?.can_edd,
+        ),
       },
     };
   },

@@ -19,6 +19,9 @@ import { Route as AuthenticatedChecklistNewRouteImport } from './routes/_authent
 import { Route as AuthenticatedConsultationsIndexRouteImport } from './routes/_authenticated/consultations.index'
 import { Route as AuthenticatedConsultationsIdRouteImport } from './routes/_authenticated/consultations.$id'
 import { Route as AuthenticatedConsultationsNewRouteImport } from './routes/_authenticated/consultations.new'
+import { Route as AuthenticatedEddIndexRouteImport } from './routes/_authenticated/edd.index'
+import { Route as AuthenticatedEddIdRouteImport } from './routes/_authenticated/edd.$id'
+import { Route as AuthenticatedEddNewRouteImport } from './routes/_authenticated/edd.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -75,6 +78,21 @@ const AuthenticatedConsultationsNewRoute =
     path: '/consultations/new',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedEddIndexRoute = AuthenticatedEddIndexRouteImport.update({
+  id: '/edd/',
+  path: '/edd/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEddIdRoute = AuthenticatedEddIdRouteImport.update({
+  id: '/edd/$id',
+  path: '/edd/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEddNewRoute = AuthenticatedEddNewRouteImport.update({
+  id: '/edd/new',
+  path: '/edd/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -84,8 +102,11 @@ export interface FileRoutesByFullPath {
   '/checklist/new': typeof AuthenticatedChecklistNewRoute
   '/consultations/$id': typeof AuthenticatedConsultationsIdRoute
   '/consultations/new': typeof AuthenticatedConsultationsNewRoute
+  '/edd/$id': typeof AuthenticatedEddIdRoute
+  '/edd/new': typeof AuthenticatedEddNewRoute
   '/checklist/': typeof AuthenticatedChecklistIndexRoute
   '/consultations/': typeof AuthenticatedConsultationsIndexRoute
+  '/edd/': typeof AuthenticatedEddIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -95,8 +116,11 @@ export interface FileRoutesByTo {
   '/checklist/new': typeof AuthenticatedChecklistNewRoute
   '/consultations/$id': typeof AuthenticatedConsultationsIdRoute
   '/consultations/new': typeof AuthenticatedConsultationsNewRoute
+  '/edd/$id': typeof AuthenticatedEddIdRoute
+  '/edd/new': typeof AuthenticatedEddNewRoute
   '/checklist': typeof AuthenticatedChecklistIndexRoute
   '/consultations': typeof AuthenticatedConsultationsIndexRoute
+  '/edd': typeof AuthenticatedEddIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -108,8 +132,11 @@ export interface FileRoutesById {
   '/_authenticated/checklist/new': typeof AuthenticatedChecklistNewRoute
   '/_authenticated/consultations/$id': typeof AuthenticatedConsultationsIdRoute
   '/_authenticated/consultations/new': typeof AuthenticatedConsultationsNewRoute
+  '/_authenticated/edd/$id': typeof AuthenticatedEddIdRoute
+  '/_authenticated/edd/new': typeof AuthenticatedEddNewRoute
   '/_authenticated/checklist/': typeof AuthenticatedChecklistIndexRoute
   '/_authenticated/consultations/': typeof AuthenticatedConsultationsIndexRoute
+  '/_authenticated/edd/': typeof AuthenticatedEddIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,8 +148,11 @@ export interface FileRouteTypes {
     | '/checklist/new'
     | '/consultations/$id'
     | '/consultations/new'
+    | '/edd/$id'
+    | '/edd/new'
     | '/checklist/'
     | '/consultations/'
+    | '/edd/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -132,8 +162,11 @@ export interface FileRouteTypes {
     | '/checklist/new'
     | '/consultations/$id'
     | '/consultations/new'
+    | '/edd/$id'
+    | '/edd/new'
     | '/checklist'
     | '/consultations'
+    | '/edd'
   id:
     | '__root__'
     | '/'
@@ -144,8 +177,11 @@ export interface FileRouteTypes {
     | '/_authenticated/checklist/new'
     | '/_authenticated/consultations/$id'
     | '/_authenticated/consultations/new'
+    | '/_authenticated/edd/$id'
+    | '/_authenticated/edd/new'
     | '/_authenticated/checklist/'
     | '/_authenticated/consultations/'
+    | '/_authenticated/edd/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -226,6 +262,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedConsultationsNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/edd/': {
+      id: '/_authenticated/edd/'
+      path: '/edd'
+      fullPath: '/edd/'
+      preLoaderRoute: typeof AuthenticatedEddIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/edd/$id': {
+      id: '/_authenticated/edd/$id'
+      path: '/edd/$id'
+      fullPath: '/edd/$id'
+      preLoaderRoute: typeof AuthenticatedEddIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/edd/new': {
+      id: '/_authenticated/edd/new'
+      path: '/edd/new'
+      fullPath: '/edd/new'
+      preLoaderRoute: typeof AuthenticatedEddNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -235,8 +292,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedChecklistNewRoute: typeof AuthenticatedChecklistNewRoute
   AuthenticatedConsultationsIdRoute: typeof AuthenticatedConsultationsIdRoute
   AuthenticatedConsultationsNewRoute: typeof AuthenticatedConsultationsNewRoute
+  AuthenticatedEddIdRoute: typeof AuthenticatedEddIdRoute
+  AuthenticatedEddNewRoute: typeof AuthenticatedEddNewRoute
   AuthenticatedChecklistIndexRoute: typeof AuthenticatedChecklistIndexRoute
   AuthenticatedConsultationsIndexRoute: typeof AuthenticatedConsultationsIndexRoute
+  AuthenticatedEddIndexRoute: typeof AuthenticatedEddIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -245,8 +305,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedChecklistNewRoute: AuthenticatedChecklistNewRoute,
   AuthenticatedConsultationsIdRoute: AuthenticatedConsultationsIdRoute,
   AuthenticatedConsultationsNewRoute: AuthenticatedConsultationsNewRoute,
+  AuthenticatedEddIdRoute: AuthenticatedEddIdRoute,
+  AuthenticatedEddNewRoute: AuthenticatedEddNewRoute,
   AuthenticatedChecklistIndexRoute: AuthenticatedChecklistIndexRoute,
   AuthenticatedConsultationsIndexRoute: AuthenticatedConsultationsIndexRoute,
+  AuthenticatedEddIndexRoute: AuthenticatedEddIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

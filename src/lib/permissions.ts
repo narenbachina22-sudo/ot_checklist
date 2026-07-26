@@ -6,6 +6,7 @@ import type { PermissionKey, Profile } from "@/lib/profile";
 const MODULE_HOME = {
   can_use_ot_handover_checklist: "/checklist",
   can_consultations: "/consultations",
+  can_edd: "/edd",
 } as const satisfies Record<PermissionKey, string>;
 
 export function homeRouteFor(profile: Profile | null | undefined) {

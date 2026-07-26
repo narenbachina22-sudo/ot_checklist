@@ -1,11 +1,11 @@
-import { ClipboardList, Stethoscope } from "lucide-react";
+import { Baby, ClipboardList, Stethoscope } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { PermissionKey } from "@/lib/profile";
 
 export interface NavItem {
   permissionKey: PermissionKey;
   label: string;
-  to: "/checklist" | "/consultations";
+  to: "/checklist" | "/consultations" | "/edd";
   icon: LucideIcon;
 }
 
@@ -21,5 +21,11 @@ export const navItems: NavItem[] = [
     label: "Consultations",
     to: "/consultations",
     icon: Stethoscope,
+  },
+  {
+    permissionKey: "can_edd",
+    label: "EDD List",
+    to: "/edd",
+    icon: Baby,
   },
 ];
