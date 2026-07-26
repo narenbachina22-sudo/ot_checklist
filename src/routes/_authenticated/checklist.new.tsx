@@ -90,7 +90,6 @@
 //   );
 // }
 
-
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -98,16 +97,19 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, Loader2, Save } from "lucide-react";
 import { ChecklistForm } from "@/components/ChecklistForm";
 import { emptyChecklist, type ChecklistData } from "@/lib/checklist-schema";
+import { requireProfilePermission } from "@/lib/permissions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/checklist/new")({
+  beforeLoad: ({ context }) => {
+    requireProfilePermission(context.gate.profile, "can_use_ot_handover_checklist");
+  },
   head: () => ({
     meta: [
       { title: "New Checklist · OT Handover" },
       {
         name: "description",
-        content:
-          "Start a new Major Surgery & Cesarean Section OT handover checklist.",
+        content: "Start a new Major Surgery & Cesarean Section OT handover checklist.",
       },
     ],
   }),
@@ -122,9 +124,7 @@ function NewChecklist() {
     const now = new Date();
 
     // Convert to local datetime format for <input type="datetime-local">
-    const localDateTime = new Date(
-      now.getTime() - now.getTimezoneOffset() * 60000
-    )
+    const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
       .toISOString()
       .slice(0, 16);
 
@@ -202,9 +202,7 @@ function NewChecklist() {
       </div>
 
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          New OT Handover Checklist
-        </h1>
+        <h1 className="text-2xl font-semibold tracking-tight">New OT Handover Checklist</h1>
 
         <p className="text-sm text-muted-foreground">
           Major Surgery & Cesarean Section — Ward Sister → OT Technician
@@ -214,11 +212,7 @@ function NewChecklist() {
       <ChecklistForm value={data} onChange={setData} />
 
       <div className="flex justify-end pt-2">
-        <Button
-          onClick={handleSave}
-          disabled={saving}
-          size="lg"
-        >
+        <Button onClick={handleSave} disabled={saving} size="lg">
           {saving ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (

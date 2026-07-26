@@ -44,8 +44,51 @@ export type Database = {
         }
         Relationships: []
       }
+      consultations: {
+        Row: {
+          age: number | null
+          consultation_date: string
+          created_at: string
+          created_by: string
+          id: string
+          location: string | null
+          notes: string | null
+          patient_name: string
+          phone: string | null
+          sex: string | null
+          updated_at: string
+        }
+        Insert: {
+          age?: number | null
+          consultation_date: string
+          created_at?: string
+          created_by: string
+          id?: string
+          location?: string | null
+          notes?: string | null
+          patient_name: string
+          phone?: string | null
+          sex?: string | null
+          updated_at?: string
+        }
+        Update: {
+          age?: number | null
+          consultation_date?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          location?: string | null
+          notes?: string | null
+          patient_name?: string
+          phone?: string | null
+          sex?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          can_consultations: boolean | null
           can_use_ot_handover_checklist: boolean | null
           created_at: string | null
           full_name: string
@@ -54,6 +97,7 @@ export type Database = {
           role: string | null
         }
         Insert: {
+          can_consultations?: boolean | null
           can_use_ot_handover_checklist?: boolean | null
           created_at?: string | null
           full_name: string
@@ -62,6 +106,7 @@ export type Database = {
           role?: string | null
         }
         Update: {
+          can_consultations?: boolean | null
           can_use_ot_handover_checklist?: boolean | null
           created_at?: string | null
           full_name?: string

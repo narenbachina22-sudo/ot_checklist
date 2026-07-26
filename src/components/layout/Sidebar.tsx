@@ -12,17 +12,18 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { navItems } from "@/lib/nav-items";
-import { userFeatures } from "@/lib/features";
+import type { Profile } from "@/lib/profile";
 
 interface AppSidebarProps {
   userName: string;
+  profile: Profile | null;
   onSignOut: () => void;
   signingOut: boolean;
 }
 
-export function AppSidebar({ userName, onSignOut, signingOut }: AppSidebarProps) {
+export function AppSidebar({ userName, profile, onSignOut, signingOut }: AppSidebarProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const visibleItems = navItems.filter((item) => userFeatures.includes(item.feature));
+  const visibleItems = navItems.filter((item) => Boolean(profile?.[item.permissionKey]));
 
   return (
     <SidebarPrimitive>

@@ -3,46 +3,52 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Download, Loader2, Pencil, Save, X } from "lucide-react";
-import { ChecklistForm } from "@/components/ChecklistForm";
-import { emptyChecklist, type ChecklistData } from "@/lib/checklist-schema";
-import { downloadChecklistPdf } from "@/lib/checklist-pdf";
+import { ChevronLeft, Loader2, Pencil, Save, X } from "lucide-react";
+import { ConsultationForm } from "@/components/ConsultationForm";
+import {
+  consultationRowToForm,
+  emptyConsultationForm,
+  validateConsultationForm,
+  type ConsultationFormErrors,
+  type ConsultationFormValues,
+} from "@/lib/consultation";
 import { requireProfilePermission } from "@/lib/permissions";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/checklist/$id")({
+export const Route = createFileRoute("/_authenticated/consultations/$id")({
   beforeLoad: ({ context }) => {
-    requireProfilePermission(context.gate.profile, "can_use_ot_handover_checklist");
+    requireProfilePermission(context.gate.profile, "can_consultations");
   },
   head: () => ({
     meta: [
-      { title: "Checklist · OT Handover" },
-      { name: "description", content: "View a saved OT handover checklist." },
+      { title: "Consultation · Keerthi Hospital" },
+      { name: "description", content: "View a saved patient consultation." },
     ],
   }),
-  component: ViewChecklist,
+  component: ViewConsultation,
   errorComponent: ({ error }) => (
     <div className="p-6 text-sm text-destructive">Failed to load: {error.message}</div>
   ),
-  notFoundComponent: () => <div className="p-6 text-sm">Checklist not found.</div>,
+  notFoundComponent: () => <div className="p-6 text-sm">Consultation not found.</div>,
 });
 
-function ViewChecklist() {
+function ViewConsultation() {
   const { id } = Route.useParams();
 
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [formData, setFormData] = useState<ChecklistData>(emptyChecklist());
+  const [formData, setFormData] = useState<ConsultationFormValues>(emptyConsultationForm());
+  const [errors, setErrors] = useState<ConsultationFormErrors>({});
+  const [creatorName, setCreatorName] = useState<string | null>(null);
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["checklist", id],
+    queryKey: ["consultation", id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("checklists")
-        .select("id, patient_name, created_by_name, created_at, data")
+        .from("consultations")
+        .select("*")
         .eq("id", id)
         .maybeSingle();
-
       if (error) throw error;
       return data;
     },
@@ -50,28 +56,47 @@ function ViewChecklist() {
 
   useEffect(() => {
     if (data) {
-      setFormData({
-        ...emptyChecklist(),
-        ...((data.data as ChecklistData) ?? {}),
-      });
+      setFormData(consultationRowToForm(data));
     }
   }, [data]);
 
-  async function handleSaveChanges() {
-    const patientName = String(formData.patient_name ?? "").trim();
+  useEffect(() => {
+    if (!data?.created_by) return;
+    let cancelled = false;
+    supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", data.created_by)
+      .maybeSingle()
+      .then(({ data: creator }) => {
+        if (!cancelled) setCreatorName(creator?.full_name ?? null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [data?.created_by]);
 
-    if (!patientName) {
-      toast.error("Patient name is required.");
+  async function handleSaveChanges() {
+    const validationErrors = validateConsultationForm(formData);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) {
+      toast.error("Please fix the errors below.");
       return;
     }
 
     setSaving(true);
 
     const { error } = await supabase
-      .from("checklists")
+      .from("consultations")
       .update({
-        patient_name: patientName,
-        data: formData as never,
+        consultation_date: formData.consultation_date,
+        patient_name: formData.patient_name.trim(),
+        age: formData.age.trim() ? Number(formData.age) : null,
+        sex: formData.sex || null,
+        phone: formData.phone.trim() || null,
+        location: formData.location.trim() || null,
+        notes: formData.notes.trim() || null,
+        updated_at: new Date().toISOString(),
       })
       .eq("id", id);
 
@@ -82,33 +107,15 @@ function ViewChecklist() {
       return;
     }
 
-    toast.success("Checklist updated.");
+    toast.success("Consultation updated.");
     setEditing(false);
     refetch();
   }
 
-  function handleDownloadPdf() {
-    if (!data) return;
-
-    try {
-      downloadChecklistPdf(formData, {
-        patientName: String(formData.patient_name ?? data.patient_name ?? ""),
-        createdByName: String(data.created_by_name ?? ""),
-        createdAt: String(data.created_at ?? ""),
-      });
-    } catch {
-      toast.error("Could not generate PDF. Please try again.");
-    }
-  }
-
   function handleCancel() {
     if (!data) return;
-
-    setFormData({
-      ...emptyChecklist(),
-      ...((data.data as ChecklistData) ?? {}),
-    });
-
+    setFormData(consultationRowToForm(data));
+    setErrors({});
     setEditing(false);
   }
 
@@ -116,26 +123,20 @@ function ViewChecklist() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Button variant="ghost" size="sm" asChild>
-          <Link to="/checklist">
+          <Link to="/consultations">
             <ChevronLeft className="mr-1 h-4 w-4" />
-            Back to records
+            Back to consultations
           </Link>
         </Button>
 
         {!isLoading && data && (
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" onClick={handleDownloadPdf}>
-              <Download className="mr-2 h-4 w-4" />
-              Download PDF
-            </Button>
-
             {editing ? (
               <>
                 <Button variant="outline" onClick={handleCancel} disabled={saving}>
                   <X className="mr-2 h-4 w-4" />
                   Cancel
                 </Button>
-
                 <Button onClick={handleSaveChanges} disabled={saving}>
                   {saving ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -162,19 +163,23 @@ function ViewChecklist() {
       ) : error ? (
         <p className="text-sm text-destructive">{error.message}</p>
       ) : !data ? (
-        <p className="text-sm text-muted-foreground">Checklist not found.</p>
+        <p className="text-sm text-muted-foreground">Consultation not found.</p>
       ) : (
         <>
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">{formData.patient_name}</h1>
-
             <p className="text-sm text-muted-foreground">
-              Recorded by {data.created_by_name} ·{" "}
-              {new Date(data.created_at as string).toLocaleString()}
+              {creatorName ? `Recorded by ${creatorName} · ` : ""}
+              {new Date(data.created_at).toLocaleString()}
             </p>
           </div>
 
-          <ChecklistForm value={formData} onChange={setFormData} readOnly={!editing} />
+          <ConsultationForm
+            value={formData}
+            onChange={setFormData}
+            errors={errors}
+            readOnly={!editing}
+          />
         </>
       )}
     </div>

@@ -6,9 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ShieldAlert, Loader2, LogOut } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { AppLayout } from "@/components/layout/AppLayout";
+import type { Profile } from "@/lib/profile";
 
 interface GateData {
   fullName: string;
+  profile: Profile | null;
   authorized: boolean;
 }
 
@@ -21,14 +23,17 @@ export const Route = createFileRoute("/_authenticated")({
     }
     const { data: profile } = await supabase
       .from("profiles")
-      .select("full_name, can_use_ot_handover_checklist")
+      .select(
+        "id, full_name, role, hospital_id, can_use_ot_handover_checklist, can_consultations, created_at",
+      )
       .eq("id", data.user.id)
       .maybeSingle();
 
     return {
       gate: {
         fullName: profile?.full_name ?? data.user.email ?? "Staff",
-        authorized: Boolean(profile?.can_use_ot_handover_checklist),
+        profile: profile ?? null,
+        authorized: Boolean(profile?.can_use_ot_handover_checklist || profile?.can_consultations),
       },
     };
   },
@@ -77,8 +82,17 @@ function AuthenticatedLayout() {
               Signed in as <span className="font-medium text-foreground">{gate.fullName}</span>.
               Please contact your administrator if you believe this is a mistake.
             </p>
-            <Button variant="outline" className="w-full" onClick={handleSignOut} disabled={signingOut}>
-              {signingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogOut className="mr-2 h-4 w-4" />}
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={handleSignOut}
+              disabled={signingOut}
+            >
+              {signingOut ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <LogOut className="mr-2 h-4 w-4" />
+              )}
               Sign out
             </Button>
           </CardContent>
@@ -88,7 +102,12 @@ function AuthenticatedLayout() {
   }
 
   return (
-    <AppLayout userName={gate.fullName} onSignOut={handleSignOut} signingOut={signingOut}>
+    <AppLayout
+      userName={gate.fullName}
+      profile={gate.profile}
+      onSignOut={handleSignOut}
+      signingOut={signingOut}
+    >
       <Outlet />
     </AppLayout>
   );

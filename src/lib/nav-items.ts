@@ -1,15 +1,25 @@
 import { ClipboardList, Stethoscope } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import type { FeatureKey } from "@/lib/features";
+import type { PermissionKey } from "@/lib/profile";
 
 export interface NavItem {
-  feature: FeatureKey;
+  permissionKey: PermissionKey;
   label: string;
   to: "/checklist" | "/consultations";
   icon: LucideIcon;
 }
 
 export const navItems: NavItem[] = [
-  { feature: "ot_checklist", label: "OT Checklist", to: "/checklist", icon: ClipboardList },
-  { feature: "consultations", label: "Consultations", to: "/consultations", icon: Stethoscope },
+  {
+    permissionKey: "can_use_ot_handover_checklist",
+    label: "OT Checklist",
+    to: "/checklist",
+    icon: ClipboardList,
+  },
+  {
+    permissionKey: "can_consultations",
+    label: "Consultations",
+    to: "/consultations",
+    icon: Stethoscope,
+  },
 ];

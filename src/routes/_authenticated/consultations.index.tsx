@@ -1,0 +1,149 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Stethoscope, Plus, Search, Loader2 } from "lucide-react";
+import { requireProfilePermission } from "@/lib/permissions";
+import { formatDateOnly } from "@/lib/consultation";
+
+export const Route = createFileRoute("/_authenticated/consultations/")({
+  beforeLoad: ({ context }) => {
+    requireProfilePermission(context.gate.profile, "can_consultations");
+  },
+  head: () => ({
+    meta: [
+      { title: "Consultations · Keerthi Hospital" },
+      { name: "description", content: "Create and browse patient consultations." },
+    ],
+  }),
+  component: ConsultationsList,
+});
+
+interface ConsultationRow {
+  id: string;
+  patient_name: string;
+  consultation_date: string;
+  created_by: string;
+}
+
+function ConsultationsList() {
+  const [search, setSearch] = useState("");
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["consultations", search],
+    queryFn: async (): Promise<{ rows: ConsultationRow[]; creatorNames: Map<string, string> }> => {
+      let q = supabase
+        .from("consultations")
+        .select("id, patient_name, consultation_date, created_by")
+        .order("consultation_date", { ascending: false })
+        .limit(200);
+      if (search.trim()) q = q.ilike("patient_name", `%${search.trim()}%`);
+      const { data, error } = await q;
+      if (error) throw error;
+      const rows = (data ?? []) as ConsultationRow[];
+
+      const creatorIds = [...new Set(rows.map((r) => r.created_by))];
+      let creatorNames = new Map<string, string>();
+      if (creatorIds.length > 0) {
+        const { data: creators } = await supabase
+          .from("profiles")
+          .select("id, full_name")
+          .in("id", creatorIds);
+        creatorNames = new Map((creators ?? []).map((c) => [c.id, c.full_name]));
+      }
+
+      return { rows, creatorNames };
+    },
+  });
+
+  const rows = data?.rows ?? [];
+  const creatorNames = data?.creatorNames ?? new Map<string, string>();
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Consultations</h1>
+          <p className="text-sm text-muted-foreground">Patient consultation records</p>
+        </div>
+        <Button asChild>
+          <Link to="/consultations/new">
+            <Plus className="mr-2 h-4 w-4" />
+            New Consultation
+          </Link>
+        </Button>
+      </div>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Stethoscope className="h-4 w-4" />
+            Consultation records
+          </CardTitle>
+          <CardDescription>Search by patient name.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search patient name…"
+              className="pl-9"
+            />
+          </div>
+
+          {isLoading ? (
+            <div className="flex justify-center py-10">
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            </div>
+          ) : rows.length === 0 ? (
+            <div className="rounded-md border border-dashed py-10 text-center text-sm text-muted-foreground">
+              {search ? "No results found." : "No consultations yet. Create the first one."}
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Patient Name</TableHead>
+                    <TableHead>Consultation Date</TableHead>
+                    <TableHead>Doctor / Created By</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell className="font-medium">{row.patient_name}</TableCell>
+                      <TableCell>{formatDateOnly(row.consultation_date)}</TableCell>
+                      <TableCell>{creatorNames.get(row.created_by) ?? "—"}</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="outline" size="sm" asChild>
+                          <Link to="/consultations/$id" params={{ id: row.id }}>
+                            View / Edit
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

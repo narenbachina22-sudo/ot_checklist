@@ -12,11 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedConsultationsRouteImport } from './routes/_authenticated/consultations'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedChecklistIndexRouteImport } from './routes/_authenticated/checklist.index'
 import { Route as AuthenticatedChecklistIdRouteImport } from './routes/_authenticated/checklist.$id'
 import { Route as AuthenticatedChecklistNewRouteImport } from './routes/_authenticated/checklist.new'
+import { Route as AuthenticatedConsultationsIndexRouteImport } from './routes/_authenticated/consultations.index'
+import { Route as AuthenticatedConsultationsIdRouteImport } from './routes/_authenticated/consultations.$id'
+import { Route as AuthenticatedConsultationsNewRouteImport } from './routes/_authenticated/consultations.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -32,12 +34,6 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedConsultationsRoute =
-  AuthenticatedConsultationsRouteImport.update({
-    id: '/consultations',
-    path: '/consultations',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -61,65 +57,95 @@ const AuthenticatedChecklistNewRoute =
     path: '/checklist/new',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedConsultationsIndexRoute =
+  AuthenticatedConsultationsIndexRouteImport.update({
+    id: '/consultations/',
+    path: '/consultations/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedConsultationsIdRoute =
+  AuthenticatedConsultationsIdRouteImport.update({
+    id: '/consultations/$id',
+    path: '/consultations/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedConsultationsNewRoute =
+  AuthenticatedConsultationsNewRouteImport.update({
+    id: '/consultations/new',
+    path: '/consultations/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/consultations': typeof AuthenticatedConsultationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/checklist/new': typeof AuthenticatedChecklistNewRoute
+  '/consultations/$id': typeof AuthenticatedConsultationsIdRoute
+  '/consultations/new': typeof AuthenticatedConsultationsNewRoute
   '/checklist/': typeof AuthenticatedChecklistIndexRoute
+  '/consultations/': typeof AuthenticatedConsultationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/consultations': typeof AuthenticatedConsultationsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/checklist/new': typeof AuthenticatedChecklistNewRoute
+  '/consultations/$id': typeof AuthenticatedConsultationsIdRoute
+  '/consultations/new': typeof AuthenticatedConsultationsNewRoute
   '/checklist': typeof AuthenticatedChecklistIndexRoute
+  '/consultations': typeof AuthenticatedConsultationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_authenticated/consultations': typeof AuthenticatedConsultationsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/_authenticated/checklist/new': typeof AuthenticatedChecklistNewRoute
+  '/_authenticated/consultations/$id': typeof AuthenticatedConsultationsIdRoute
+  '/_authenticated/consultations/new': typeof AuthenticatedConsultationsNewRoute
   '/_authenticated/checklist/': typeof AuthenticatedChecklistIndexRoute
+  '/_authenticated/consultations/': typeof AuthenticatedConsultationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
-    | '/consultations'
     | '/dashboard'
     | '/checklist/$id'
     | '/checklist/new'
+    | '/consultations/$id'
+    | '/consultations/new'
     | '/checklist/'
+    | '/consultations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
-    | '/consultations'
     | '/dashboard'
     | '/checklist/$id'
     | '/checklist/new'
+    | '/consultations/$id'
+    | '/consultations/new'
     | '/checklist'
+    | '/consultations'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
-    | '/_authenticated/consultations'
     | '/_authenticated/dashboard'
     | '/_authenticated/checklist/$id'
     | '/_authenticated/checklist/new'
+    | '/_authenticated/consultations/$id'
+    | '/_authenticated/consultations/new'
     | '/_authenticated/checklist/'
+    | '/_authenticated/consultations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -151,13 +177,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/consultations': {
-      id: '/_authenticated/consultations'
-      path: '/consultations'
-      fullPath: '/consultations'
-      preLoaderRoute: typeof AuthenticatedConsultationsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -186,23 +205,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChecklistNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/consultations/': {
+      id: '/_authenticated/consultations/'
+      path: '/consultations'
+      fullPath: '/consultations/'
+      preLoaderRoute: typeof AuthenticatedConsultationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/consultations/$id': {
+      id: '/_authenticated/consultations/$id'
+      path: '/consultations/$id'
+      fullPath: '/consultations/$id'
+      preLoaderRoute: typeof AuthenticatedConsultationsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/consultations/new': {
+      id: '/_authenticated/consultations/new'
+      path: '/consultations/new'
+      fullPath: '/consultations/new'
+      preLoaderRoute: typeof AuthenticatedConsultationsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedConsultationsRoute: typeof AuthenticatedConsultationsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedChecklistIdRoute: typeof AuthenticatedChecklistIdRoute
   AuthenticatedChecklistNewRoute: typeof AuthenticatedChecklistNewRoute
+  AuthenticatedConsultationsIdRoute: typeof AuthenticatedConsultationsIdRoute
+  AuthenticatedConsultationsNewRoute: typeof AuthenticatedConsultationsNewRoute
   AuthenticatedChecklistIndexRoute: typeof AuthenticatedChecklistIndexRoute
+  AuthenticatedConsultationsIndexRoute: typeof AuthenticatedConsultationsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedConsultationsRoute: AuthenticatedConsultationsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedChecklistIdRoute: AuthenticatedChecklistIdRoute,
   AuthenticatedChecklistNewRoute: AuthenticatedChecklistNewRoute,
+  AuthenticatedConsultationsIdRoute: AuthenticatedConsultationsIdRoute,
+  AuthenticatedConsultationsNewRoute: AuthenticatedConsultationsNewRoute,
   AuthenticatedChecklistIndexRoute: AuthenticatedChecklistIndexRoute,
+  AuthenticatedConsultationsIndexRoute: AuthenticatedConsultationsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

@@ -6,8 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ClipboardCheck, Plus, Search, FileText, Loader2 } from "lucide-react";
+import { requireProfilePermission } from "@/lib/permissions";
 
 export const Route = createFileRoute("/_authenticated/checklist/")({
+  beforeLoad: ({ context }) => {
+    requireProfilePermission(context.gate.profile, "can_use_ot_handover_checklist");
+  },
   head: () => ({
     meta: [
       { title: "Checklists · OT Handover" },
