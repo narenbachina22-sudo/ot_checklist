@@ -5,7 +5,7 @@ import type { PermissionKey } from "@/lib/profile";
 export interface NavItem {
   permissionKey: PermissionKey;
   label: string;
-  to: "/checklist" | "/consultations" | "/edd";
+  to: "/checklist" | "/counselling" | "/edd";
   icon: LucideIcon;
 }
 
@@ -17,9 +17,9 @@ export const navItems: NavItem[] = [
     icon: ClipboardList,
   },
   {
-    permissionKey: "can_consultations",
-    label: "Consultations",
-    to: "/consultations",
+    permissionKey: "can_counselling",
+    label: "Counselling",
+    to: "/counselling",
     icon: Stethoscope,
   },
   {

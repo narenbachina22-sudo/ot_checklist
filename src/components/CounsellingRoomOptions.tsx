@@ -20,7 +20,7 @@
 //   type RoomFeatureKey,
 //   type RoomOption,
 //   type RoomType,
-// } from "@/lib/consultation";
+// } from "@/lib/counselling";
 
 // interface Props {
 //   options: RoomOption[];
@@ -30,7 +30,7 @@
 //   readOnly?: boolean;
 // }
 
-// export function ConsultationRoomOptions({
+// export function CounsellingRoomOptions({
 //   options,
 //   selectedId,
 //   onOptionsChange,
@@ -362,7 +362,7 @@ import {
   type RoomFeatureKey,
   type RoomOption,
   type RoomType,
-} from "@/lib/consultation";
+} from "@/lib/counselling";
 
 interface Props {
   options: RoomOption[];
@@ -372,7 +372,7 @@ interface Props {
   readOnly?: boolean;
 }
 
-export function ConsultationRoomOptions({
+export function CounsellingRoomOptions({
   options,
   selectedId,
   onOptionsChange,

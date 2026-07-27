@@ -12,22 +12,22 @@
 // import { cn } from "@/lib/utils";
 // import {
 //   PAYMENT_TYPES,
-//   type ConsultationFormErrors,
-//   type ConsultationFormValues,
-// } from "@/lib/consultation";
-// import { ConsultationRoomOptions } from "@/components/ConsultationRoomOptions";
+//   type CounsellingFormErrors,
+//   type CounsellingFormValues,
+// } from "@/lib/counselling";
+// import { CounsellingRoomOptions } from "@/components/CounsellingRoomOptions";
 
 // interface Props {
-//   value: ConsultationFormValues;
-//   onChange: (next: ConsultationFormValues) => void;
-//   errors?: ConsultationFormErrors;
+//   value: CounsellingFormValues;
+//   onChange: (next: CounsellingFormValues) => void;
+//   errors?: CounsellingFormErrors;
 //   readOnly?: boolean;
 // }
 
 // const SEX_OPTIONS = ["Male", "Female", "Other"];
 
-// export function ConsultationForm({ value, onChange, errors, readOnly = false }: Props) {
-//   function set<K extends keyof ConsultationFormValues>(key: K, v: ConsultationFormValues[K]) {
+// export function CounsellingForm({ value, onChange, errors, readOnly = false }: Props) {
+//   function set<K extends keyof CounsellingFormValues>(key: K, v: CounsellingFormValues[K]) {
 //     onChange({ ...value, [key]: v });
 //   }
 
@@ -35,22 +35,22 @@
 //     <div className="space-y-4">
 //       <Card>
 //         <CardHeader className="pb-3">
-//           <CardTitle className="text-base">Consultation details</CardTitle>
+//           <CardTitle className="text-base">Counselling details</CardTitle>
 //         </CardHeader>
 
 //         <CardContent className="grid gap-4 sm:grid-cols-2">
 //           <div className="space-y-1">
-//             <Label htmlFor="consultation_date">Consultation Date</Label>
+//             <Label htmlFor="counselling_date">Counselling Date</Label>
 //             <Input
-//               id="consultation_date"
+//               id="counselling_date"
 //               type="date"
-//               value={value.consultation_date}
-//               onChange={(e) => set("consultation_date", e.target.value)}
+//               value={value.counselling_date}
+//               onChange={(e) => set("counselling_date", e.target.value)}
 //               disabled={readOnly}
-//               className={cn(errors?.consultation_date && "border-red-500 ring-1 ring-red-500")}
+//               className={cn(errors?.counselling_date && "border-red-500 ring-1 ring-red-500")}
 //             />
-//             {errors?.consultation_date && (
-//               <p className="text-xs font-medium text-red-600">{errors.consultation_date}</p>
+//             {errors?.counselling_date && (
+//               <p className="text-xs font-medium text-red-600">{errors.counselling_date}</p>
 //             )}
 //           </div>
 
@@ -202,7 +202,7 @@
 //               id="notes"
 //               value={value.notes}
 //               onChange={(e) => set("notes", e.target.value)}
-//               placeholder="Consultation notes…"
+//               placeholder="Counselling notes…"
 //               disabled={readOnly}
 //               className="min-h-[160px]"
 //             />
@@ -215,7 +215,7 @@
 //           <CardTitle className="text-base">Room options &amp; estimate</CardTitle>
 //         </CardHeader>
 //         <CardContent>
-//           <ConsultationRoomOptions
+//           <CounsellingRoomOptions
 //             options={value.room_options}
 //             selectedId={value.selected_option_id}
 //             onOptionsChange={(next) => set("room_options", next)}
@@ -242,46 +242,46 @@ import {
 import { cn } from "@/lib/utils";
 import {
   PAYMENT_TYPES,
-  type ConsultationFormErrors,
-  type ConsultationFormValues,
-} from "@/lib/consultation";
-import { ConsultationRoomOptions } from "@/components/ConsultationRoomOptions";
+  type CounsellingFormErrors,
+  type CounsellingFormValues,
+} from "@/lib/counselling";
+import { CounsellingRoomOptions } from "@/components/CounsellingRoomOptions";
 
 interface Props {
-  value: ConsultationFormValues;
-  onChange: (next: ConsultationFormValues) => void;
-  errors?: ConsultationFormErrors;
+  value: CounsellingFormValues;
+  onChange: (next: CounsellingFormValues) => void;
+  errors?: CounsellingFormErrors;
   readOnly?: boolean;
 }
 
 const SEX_OPTIONS = ["Male", "Female", "Other"];
 
-export function ConsultationForm({ value, onChange, errors, readOnly = false }: Props) {
-  function set<K extends keyof ConsultationFormValues>(key: K, v: ConsultationFormValues[K]) {
+export function CounsellingForm({ value, onChange, errors, readOnly = false }: Props) {
+  function set<K extends keyof CounsellingFormValues>(key: K, v: CounsellingFormValues[K]) {
     onChange({ ...value, [key]: v });
   }
 
   return (
     <div className="space-y-4">
-      {/* 1) Consultation details */}
+      {/* 1) Counselling details */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Consultation details</CardTitle>
+          <CardTitle className="text-base">Counselling details</CardTitle>
         </CardHeader>
 
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1">
-            <Label htmlFor="consultation_date">Consultation Date</Label>
+            <Label htmlFor="counselling_date">Counselling Date</Label>
             <Input
-              id="consultation_date"
+              id="counselling_date"
               type="date"
-              value={value.consultation_date}
-              onChange={(e) => set("consultation_date", e.target.value)}
+              value={value.counselling_date}
+              onChange={(e) => set("counselling_date", e.target.value)}
               disabled={readOnly}
-              className={cn(errors?.consultation_date && "border-red-500 ring-1 ring-red-500")}
+              className={cn(errors?.counselling_date && "border-red-500 ring-1 ring-red-500")}
             />
-            {errors?.consultation_date && (
-              <p className="text-xs font-medium text-red-600">{errors.consultation_date}</p>
+            {errors?.counselling_date && (
+              <p className="text-xs font-medium text-red-600">{errors.counselling_date}</p>
             )}
           </div>
 
@@ -418,7 +418,7 @@ export function ConsultationForm({ value, onChange, errors, readOnly = false }: 
           <CardTitle className="text-base">Room options &amp; estimate</CardTitle>
         </CardHeader>
         <CardContent>
-          <ConsultationRoomOptions
+          <CounsellingRoomOptions
             options={value.room_options}
             selectedId={value.selected_option_id}
             onOptionsChange={(next) => set("room_options", next)}
@@ -438,7 +438,7 @@ export function ConsultationForm({ value, onChange, errors, readOnly = false }: 
             id="notes"
             value={value.notes}
             onChange={(e) => set("notes", e.target.value)}
-            placeholder="Consultation notes…"
+            placeholder="Counselling notes…"
             disabled={readOnly}
             className="min-h-[160px]"
           />

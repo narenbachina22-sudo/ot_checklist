@@ -4,48 +4,48 @@
 // import { supabase } from "@/integrations/supabase/client";
 // import { Button } from "@/components/ui/button";
 // import { ChevronLeft, Loader2, Pencil, Save, X } from "lucide-react";
-// import { ConsultationForm } from "@/components/ConsultationForm";
+// import { CounsellingForm } from "@/components/CounsellingForm";
 // import {
-//   consultationRowToForm,
-//   emptyConsultationForm,
-//   validateConsultationForm,
-//   type ConsultationFormErrors,
-//   type ConsultationFormValues,
-// } from "@/lib/consultation";
+//   counsellingRowToForm,
+//   emptyCounsellingForm,
+//   validateCounsellingForm,
+//   type CounsellingFormErrors,
+//   type CounsellingFormValues,
+// } from "@/lib/counselling";
 // import { requireProfilePermission } from "@/lib/permissions";
 // import { toast } from "sonner";
 
-// export const Route = createFileRoute("/_authenticated/consultations/$id")({
+// export const Route = createFileRoute("/_authenticated/counselling/$id")({
 //   beforeLoad: ({ context }) => {
-//     requireProfilePermission(context.gate.profile, "can_consultations");
+//     requireProfilePermission(context.gate.profile, "can_counselling");
 //   },
 //   head: () => ({
 //     meta: [
-//       { title: "Consultation · Keerthi Hospital" },
-//       { name: "description", content: "View a saved patient consultation." },
+//       { title: "Counselling · Keerthi Hospital" },
+//       { name: "description", content: "View a saved patient counselling." },
 //     ],
 //   }),
-//   component: ViewConsultation,
+//   component: ViewCounselling,
 //   errorComponent: ({ error }) => (
 //     <div className="p-6 text-sm text-destructive">Failed to load: {error.message}</div>
 //   ),
-//   notFoundComponent: () => <div className="p-6 text-sm">Consultation not found.</div>,
+//   notFoundComponent: () => <div className="p-6 text-sm">Counselling not found.</div>,
 // });
 
-// function ViewConsultation() {
+// function ViewCounselling() {
 //   const { id } = Route.useParams();
 
 //   const [editing, setEditing] = useState(false);
 //   const [saving, setSaving] = useState(false);
-//   const [formData, setFormData] = useState<ConsultationFormValues>(emptyConsultationForm());
-//   const [errors, setErrors] = useState<ConsultationFormErrors>({});
+//   const [formData, setFormData] = useState<CounsellingFormValues>(emptyCounsellingForm());
+//   const [errors, setErrors] = useState<CounsellingFormErrors>({});
 //   const [creatorName, setCreatorName] = useState<string | null>(null);
 
 //   const { data, isLoading, error, refetch } = useQuery({
-//     queryKey: ["consultation", id],
+//     queryKey: ["counselling", id],
 //     queryFn: async () => {
 //       const { data, error } = await supabase
-//         .from("consultations")
+//         .from("counselling")
 //         .select("*")
 //         .eq("id", id)
 //         .maybeSingle();
@@ -56,7 +56,7 @@
 
 //   useEffect(() => {
 //     if (data) {
-//       setFormData(consultationRowToForm(data));
+//       setFormData(counsellingRowToForm(data));
 //     }
 //   }, [data]);
 
@@ -77,7 +77,7 @@
 //   }, [data?.created_by]);
 
 //   async function handleSaveChanges() {
-//     const validationErrors = validateConsultationForm(formData);
+//     const validationErrors = validateCounsellingForm(formData);
 //     setErrors(validationErrors);
 //     if (Object.keys(validationErrors).length > 0) {
 //       toast.error("Please fix the errors below.");
@@ -87,9 +87,9 @@
 //     setSaving(true);
 
 //     const { error } = await supabase
-//       .from("consultations")
+//       .from("counselling")
 //       .update({
-//         consultation_date: formData.consultation_date,
+//         counselling_date: formData.counselling_date,
 //         patient_name: formData.patient_name.trim(),
 //         age: formData.age.trim() ? Number(formData.age) : null,
 //         sex: formData.sex || null,
@@ -107,14 +107,14 @@
 //       return;
 //     }
 
-//     toast.success("Consultation updated.");
+//     toast.success("Counselling updated.");
 //     setEditing(false);
 //     refetch();
 //   }
 
 //   function handleCancel() {
 //     if (!data) return;
-//     setFormData(consultationRowToForm(data));
+//     setFormData(counsellingRowToForm(data));
 //     setErrors({});
 //     setEditing(false);
 //   }
@@ -123,9 +123,9 @@
 //     <div className="space-y-5">
 //       <div className="flex flex-wrap items-center justify-between gap-3">
 //         <Button variant="ghost" size="sm" asChild>
-//           <Link to="/consultations">
+//           <Link to="/counselling">
 //             <ChevronLeft className="mr-1 h-4 w-4" />
-//             Back to consultations
+//             Back to counselling
 //           </Link>
 //         </Button>
 
@@ -163,7 +163,7 @@
 //       ) : error ? (
 //         <p className="text-sm text-destructive">{error.message}</p>
 //       ) : !data ? (
-//         <p className="text-sm text-muted-foreground">Consultation not found.</p>
+//         <p className="text-sm text-muted-foreground">Counselling not found.</p>
 //       ) : (
 //         <>
 //           <div>
@@ -174,7 +174,7 @@
 //             </p>
 //           </div>
 
-//           <ConsultationForm
+//           <CounsellingForm
 //             value={formData}
 //             onChange={setFormData}
 //             errors={errors}
@@ -193,49 +193,49 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Loader2, Pencil, Save, X } from "lucide-react";
-import { ConsultationForm } from "@/components/ConsultationForm";
+import { CounsellingForm } from "@/components/CounsellingForm";
 import {
-  consultationFormToRow,
-  consultationRowToForm,
-  emptyConsultationForm,
-  validateConsultationForm,
-  type ConsultationFormErrors,
-  type ConsultationFormValues,
-} from "@/lib/consultation";
+  counsellingFormToRow,
+  counsellingRowToForm,
+  emptyCounsellingForm,
+  validateCounsellingForm,
+  type CounsellingFormErrors,
+  type CounsellingFormValues,
+} from "@/lib/counselling";
 import { requireProfilePermission } from "@/lib/permissions";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/consultations/$id")({
+export const Route = createFileRoute("/_authenticated/counselling/$id")({
   beforeLoad: ({ context }) => {
-    requireProfilePermission(context.gate.profile, "can_consultations");
+    requireProfilePermission(context.gate.profile, "can_counselling");
   },
   head: () => ({
     meta: [
-      { title: "Consultation · Keerthi Hospital" },
-      { name: "description", content: "View a saved patient consultation." },
+      { title: "Counselling · Keerthi Hospital" },
+      { name: "description", content: "View a saved patient counselling." },
     ],
   }),
-  component: ViewConsultation,
+  component: ViewCounselling,
   errorComponent: ({ error }) => (
     <div className="p-6 text-sm text-destructive">Failed to load: {error.message}</div>
   ),
-  notFoundComponent: () => <div className="p-6 text-sm">Consultation not found.</div>,
+  notFoundComponent: () => <div className="p-6 text-sm">Counselling not found.</div>,
 });
 
-function ViewConsultation() {
+function ViewCounselling() {
   const { id } = Route.useParams();
 
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [formData, setFormData] = useState<ConsultationFormValues>(emptyConsultationForm());
-  const [errors, setErrors] = useState<ConsultationFormErrors>({});
+  const [formData, setFormData] = useState<CounsellingFormValues>(emptyCounsellingForm());
+  const [errors, setErrors] = useState<CounsellingFormErrors>({});
   const [creatorName, setCreatorName] = useState<string | null>(null);
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["consultation", id],
+    queryKey: ["counselling", id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("consultations")
+        .from("counselling")
         .select("*")
         .eq("id", id)
         .maybeSingle();
@@ -246,7 +246,7 @@ function ViewConsultation() {
 
   useEffect(() => {
     if (data) {
-      setFormData(consultationRowToForm(data));
+      setFormData(counsellingRowToForm(data));
     }
   }, [data]);
 
@@ -267,7 +267,7 @@ function ViewConsultation() {
   }, [data?.created_by]);
 
   async function handleSaveChanges() {
-    const validationErrors = validateConsultationForm(formData);
+    const validationErrors = validateCounsellingForm(formData);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) {
       toast.error("Please fix the errors below.");
@@ -277,9 +277,9 @@ function ViewConsultation() {
     setSaving(true);
 
     const { error } = await supabase
-      .from("consultations")
+      .from("counselling")
       .update({
-        ...consultationFormToRow(formData),
+        ...counsellingFormToRow(formData),
         updated_at: new Date().toISOString(),
       })
       .eq("id", id);
@@ -291,14 +291,14 @@ function ViewConsultation() {
       return;
     }
 
-    toast.success("Consultation updated.");
+    toast.success("Counselling updated.");
     setEditing(false);
     refetch();
   }
 
   function handleCancel() {
     if (!data) return;
-    setFormData(consultationRowToForm(data));
+    setFormData(counsellingRowToForm(data));
     setErrors({});
     setEditing(false);
   }
@@ -307,9 +307,9 @@ function ViewConsultation() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Button variant="ghost" size="sm" asChild>
-          <Link to="/consultations">
+          <Link to="/counselling">
             <ChevronLeft className="mr-1 h-4 w-4" />
-            Back to consultations
+            Back to counselling
           </Link>
         </Button>
 
@@ -347,7 +347,7 @@ function ViewConsultation() {
       ) : error ? (
         <p className="text-sm text-destructive">{error.message}</p>
       ) : !data ? (
-        <p className="text-sm text-muted-foreground">Consultation not found.</p>
+        <p className="text-sm text-muted-foreground">Counselling not found.</p>
       ) : (
         <>
           <div>
@@ -358,7 +358,7 @@ function ViewConsultation() {
             </p>
           </div>
 
-          <ConsultationForm
+          <CounsellingForm
             value={formData}
             onChange={setFormData}
             errors={errors}

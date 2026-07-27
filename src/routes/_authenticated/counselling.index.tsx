@@ -15,43 +15,43 @@ import {
 } from "@/components/ui/table";
 import { Stethoscope, Plus, Search, Loader2 } from "lucide-react";
 import { requireProfilePermission } from "@/lib/permissions";
-import { formatDateOnly } from "@/lib/consultation";
+import { formatDateOnly } from "@/lib/counselling";
 
-export const Route = createFileRoute("/_authenticated/consultations/")({
+export const Route = createFileRoute("/_authenticated/counselling/")({
   beforeLoad: ({ context }) => {
-    requireProfilePermission(context.gate.profile, "can_consultations");
+    requireProfilePermission(context.gate.profile, "can_counselling");
   },
   head: () => ({
     meta: [
-      { title: "Consultations · Keerthi Hospital" },
-      { name: "description", content: "Create and browse patient consultations." },
+      { title: "Counselling · Keerthi Hospital" },
+      { name: "description", content: "Create and browse patient counselling." },
     ],
   }),
-  component: ConsultationsList,
+  component: CounsellingList,
 });
 
-interface ConsultationRow {
+interface CounsellingRow {
   id: string;
   patient_name: string;
-  consultation_date: string;
+  counselling_date: string;
   created_by: string;
 }
 
-function ConsultationsList() {
+function CounsellingList() {
   const [search, setSearch] = useState("");
 
   const { data, isLoading } = useQuery({
-    queryKey: ["consultations", search],
-    queryFn: async (): Promise<{ rows: ConsultationRow[]; creatorNames: Map<string, string> }> => {
+    queryKey: ["counselling", search],
+    queryFn: async (): Promise<{ rows: CounsellingRow[]; creatorNames: Map<string, string> }> => {
       let q = supabase
-        .from("consultations")
-        .select("id, patient_name, consultation_date, created_by")
-        .order("consultation_date", { ascending: false })
+        .from("counselling")
+        .select("id, patient_name, counselling_date, created_by")
+        .order("counselling_date", { ascending: false })
         .limit(200);
       if (search.trim()) q = q.ilike("patient_name", `%${search.trim()}%`);
       const { data, error } = await q;
       if (error) throw error;
-      const rows = (data ?? []) as ConsultationRow[];
+      const rows = (data ?? []) as CounsellingRow[];
 
       const creatorIds = [...new Set(rows.map((r) => r.created_by))];
       let creatorNames = new Map<string, string>();
@@ -74,13 +74,13 @@ function ConsultationsList() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Consultations</h1>
-          <p className="text-sm text-muted-foreground">Patient consultation records</p>
+          <h1 className="text-2xl font-semibold tracking-tight">Counselling</h1>
+          <p className="text-sm text-muted-foreground">Patient counselling records</p>
         </div>
         <Button asChild>
-          <Link to="/consultations/new">
+          <Link to="/counselling/new">
             <Plus className="mr-2 h-4 w-4" />
-            New Consultation
+            New Counselling
           </Link>
         </Button>
       </div>
@@ -89,7 +89,7 @@ function ConsultationsList() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">
             <Stethoscope className="h-4 w-4" />
-            Consultation records
+            Counselling records
           </CardTitle>
           <CardDescription>Search by patient name.</CardDescription>
         </CardHeader>
@@ -110,7 +110,7 @@ function ConsultationsList() {
             </div>
           ) : rows.length === 0 ? (
             <div className="rounded-md border border-dashed py-10 text-center text-sm text-muted-foreground">
-              {search ? "No results found." : "No consultations yet. Create the first one."}
+              {search ? "No results found." : "No counselling yet. Create the first one."}
             </div>
           ) : (
             <div className="overflow-x-auto rounded-md border">
@@ -118,7 +118,7 @@ function ConsultationsList() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Patient Name</TableHead>
-                    <TableHead>Consultation Date</TableHead>
+                    <TableHead>Counselling Date</TableHead>
                     <TableHead>Doctor / Created By</TableHead>
                     <TableHead className="text-right">Action</TableHead>
                   </TableRow>
@@ -127,11 +127,11 @@ function ConsultationsList() {
                   {rows.map((row) => (
                     <TableRow key={row.id}>
                       <TableCell className="font-medium">{row.patient_name}</TableCell>
-                      <TableCell>{formatDateOnly(row.consultation_date)}</TableCell>
+                      <TableCell>{formatDateOnly(row.counselling_date)}</TableCell>
                       <TableCell>{creatorNames.get(row.created_by) ?? "—"}</TableCell>
                       <TableCell className="text-right">
                         <Button variant="outline" size="sm" asChild>
-                          <Link to="/consultations/$id" params={{ id: row.id }}>
+                          <Link to="/counselling/$id" params={{ id: row.id }}>
                             View / Edit
                           </Link>
                         </Button>

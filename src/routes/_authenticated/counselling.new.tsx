@@ -3,42 +3,42 @@
 // import { supabase } from "@/integrations/supabase/client";
 // import { Button } from "@/components/ui/button";
 // import { Loader2, Save, X } from "lucide-react";
-// import { ConsultationForm } from "@/components/ConsultationForm";
+// import { CounsellingForm } from "@/components/CounsellingForm";
 // import {
 
-//   emptyConsultationForm,
-//   validateConsultationForm,
-//   type ConsultationFormErrors,
-//   type ConsultationFormValues,
-// } from "@/lib/consultation";
+//   emptyCounsellingForm,
+//   validateCounsellingForm,
+//   type CounsellingFormErrors,
+//   type CounsellingFormValues,
+// } from "@/lib/counselling";
 // import { requireProfilePermission } from "@/lib/permissions";
 // import { toast } from "sonner";
 
-// export const Route = createFileRoute("/_authenticated/consultations/new")({
+// export const Route = createFileRoute("/_authenticated/counselling/new")({
 //   beforeLoad: ({ context }) => {
-//     requireProfilePermission(context.gate.profile, "can_consultations");
+//     requireProfilePermission(context.gate.profile, "can_counselling");
 //   },
 //   head: () => ({
 //     meta: [
-//       { title: "New Consultation · Keerthi Hospital" },
-//       { name: "description", content: "Record a new patient consultation." },
+//       { title: "New Counselling · Keerthi Hospital" },
+//       { name: "description", content: "Record a new patient counselling." },
 //     ],
 //   }),
-//   component: NewConsultation,
+//   component: NewCounselling,
 // });
 
-// function NewConsultation() {
+// function NewCounselling() {
 //   const navigate = useNavigate();
-//   const [data, setData] = useState<ConsultationFormValues>(() => emptyConsultationForm());
-//   const [errors, setErrors] = useState<ConsultationFormErrors>({});
+//   const [data, setData] = useState<CounsellingFormValues>(() => emptyCounsellingForm());
+//   const [errors, setErrors] = useState<CounsellingFormErrors>({});
 //   const [saving, setSaving] = useState(false);
 
 //   function handleCancel() {
-//     navigate({ to: "/consultations" });
+//     navigate({ to: "/counselling" });
 //   }
 
 //   async function handleSave() {
-//     const validationErrors = validateConsultationForm(data);
+//     const validationErrors = validateCounsellingForm(data);
 //     setErrors(validationErrors);
 //     if (Object.keys(validationErrors).length > 0) {
 //       toast.error("Please fix the errors below.");
@@ -56,9 +56,9 @@
 //       return;
 //     }
 
-//     const { error } = await supabase.from("consultations").insert({
+//     const { error } = await supabase.from("counselling").insert({
 //       created_by: uid,
-//       consultation_date: data.consultation_date,
+//       counselling_date: data.counselling_date,
 //       patient_name: data.patient_name.trim(),
 //       age: data.age.trim() ? Number(data.age) : null,
 //       sex: data.sex || null,
@@ -74,8 +74,8 @@
 //       return;
 //     }
 
-//     toast.success("Consultation saved");
-//     navigate({ to: "/consultations" });
+//     toast.success("Counselling saved");
+//     navigate({ to: "/counselling" });
 //   }
 
 //   return (
@@ -97,11 +97,11 @@
 //       </div>
 
 //       <div>
-//         <h1 className="text-2xl font-semibold tracking-tight">New Consultation</h1>
-//         <p className="text-sm text-muted-foreground">Record patient consultation details.</p>
+//         <h1 className="text-2xl font-semibold tracking-tight">New Counselling</h1>
+//         <p className="text-sm text-muted-foreground">Record patient counselling details.</p>
 //       </div>
 
-//       <ConsultationForm value={data} onChange={setData} errors={errors} />
+//       <CounsellingForm value={data} onChange={setData} errors={errors} />
 
 //       <div className="flex justify-end gap-2 pt-2">
 //         <Button variant="outline" onClick={handleCancel} disabled={saving}>
@@ -126,42 +126,42 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Loader2, Save, X } from "lucide-react";
-import { ConsultationForm } from "@/components/ConsultationForm";
+import { CounsellingForm } from "@/components/CounsellingForm";
 import {
-  consultationFormToRow,
-  emptyConsultationForm,
-  validateConsultationForm,
-  type ConsultationFormErrors,
-  type ConsultationFormValues,
-} from "@/lib/consultation";
+  counsellingFormToRow,
+  emptyCounsellingForm,
+  validateCounsellingForm,
+  type CounsellingFormErrors,
+  type CounsellingFormValues,
+} from "@/lib/counselling";
 import { requireProfilePermission } from "@/lib/permissions";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/consultations/new")({
+export const Route = createFileRoute("/_authenticated/counselling/new")({
   beforeLoad: ({ context }) => {
-    requireProfilePermission(context.gate.profile, "can_consultations");
+    requireProfilePermission(context.gate.profile, "can_counselling");
   },
   head: () => ({
     meta: [
-      { title: "New Consultation · Keerthi Hospital" },
-      { name: "description", content: "Record a new patient consultation." },
+      { title: "New Counselling · Keerthi Hospital" },
+      { name: "description", content: "Record a new patient counselling." },
     ],
   }),
-  component: NewConsultation,
+  component: NewCounselling,
 });
 
-function NewConsultation() {
+function NewCounselling() {
   const navigate = useNavigate();
-  const [data, setData] = useState<ConsultationFormValues>(() => emptyConsultationForm());
-  const [errors, setErrors] = useState<ConsultationFormErrors>({});
+  const [data, setData] = useState<CounsellingFormValues>(() => emptyCounsellingForm());
+  const [errors, setErrors] = useState<CounsellingFormErrors>({});
   const [saving, setSaving] = useState(false);
 
   function handleCancel() {
-    navigate({ to: "/consultations" });
+    navigate({ to: "/counselling" });
   }
 
   async function handleSave() {
-    const validationErrors = validateConsultationForm(data);
+    const validationErrors = validateCounsellingForm(data);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) {
       toast.error("Please fix the errors below.");
@@ -179,9 +179,9 @@ function NewConsultation() {
       return;
     }
 
-    const { error } = await supabase.from("consultations").insert({
+    const { error } = await supabase.from("counselling").insert({
       created_by: uid,
-      ...consultationFormToRow(data),
+      ...counsellingFormToRow(data),
     });
 
     setSaving(false);
@@ -191,8 +191,8 @@ function NewConsultation() {
       return;
     }
 
-    toast.success("Consultation saved");
-    navigate({ to: "/consultations" });
+    toast.success("Counselling saved");
+    navigate({ to: "/counselling" });
   }
 
   return (
@@ -214,11 +214,11 @@ function NewConsultation() {
       </div>
 
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">New Consultation</h1>
-        <p className="text-sm text-muted-foreground">Record patient consultation details.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">New Counselling</h1>
+        <p className="text-sm text-muted-foreground">Record patient counselling details.</p>
       </div>
 
-      <ConsultationForm value={data} onChange={setData} errors={errors} />
+      <CounsellingForm value={data} onChange={setData} errors={errors} />
 
       <div className="flex justify-end gap-2 pt-2">
         <Button variant="outline" onClick={handleCancel} disabled={saving}>

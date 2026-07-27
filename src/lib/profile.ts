@@ -7,5 +7,5 @@ export type Profile = Tables<"profiles">;
 
 export type PermissionKey =
   | "can_use_ot_handover_checklist"
-  | "can_consultations"
+  | "can_counselling"
   | "can_edd";

@@ -5,7 +5,7 @@ import type { PermissionKey, Profile } from "@/lib/profile";
 // they tried to open. Add an entry here whenever a new gated module ships.
 const MODULE_HOME = {
   can_use_ot_handover_checklist: "/checklist",
-  can_consultations: "/consultations",
+  can_counselling: "/counselling",
   can_edd: "/edd",
 } as const satisfies Record<PermissionKey, string>;
 

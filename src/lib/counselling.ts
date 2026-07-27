@@ -1,6 +1,6 @@
 // import type { Json, Tables } from "@/integrations/supabase/types";
 
-// export type ConsultationRow = Tables<"consultations">;
+// export type CounsellingRow = Tables<"counselling">;
 
 // /* ------------------------------------------------------------------ */
 // /* Payment type                                                        */
@@ -76,8 +76,8 @@
 // /* Form values                                                         */
 // /* ------------------------------------------------------------------ */
 
-// export interface ConsultationFormValues {
-//   consultation_date: string;
+// export interface CounsellingFormValues {
+//   counselling_date: string;
 //   patient_name: string;
 //   age: string;
 //   sex: string;
@@ -92,9 +92,9 @@
 //   selected_option_id: string;
 // }
 
-// export function emptyConsultationForm(): ConsultationFormValues {
+// export function emptyCounsellingForm(): CounsellingFormValues {
 //   return {
-//     consultation_date: "",
+//     counselling_date: "",
 //     patient_name: "",
 //     age: "",
 //     sex: "",
@@ -160,9 +160,9 @@
 //   });
 // }
 
-// export function consultationRowToForm(row: ConsultationRow): ConsultationFormValues {
+// export function counsellingRowToForm(row: CounsellingRow): CounsellingFormValues {
 //   return {
-//     consultation_date: row.consultation_date?.slice(0, 10) ?? "",
+//     counselling_date: row.counselling_date?.slice(0, 10) ?? "",
 //     patient_name: row.patient_name ?? "",
 //     age: row.age != null ? String(row.age) : "",
 //     sex: row.sex ?? "",
@@ -182,14 +182,14 @@
 //  * Shapes the form values into the exact columns the DB expects.
 //  * Shared by the "new" and "edit" pages so they never drift apart.
 //  */
-// export function consultationFormToRow(values: ConsultationFormValues) {
+// export function counsellingFormToRow(values: CounsellingFormValues) {
 //   const amountNum = values.amount.trim() ? Number(values.amount) : null;
 
 //   // Only keep a selection that still points at an existing option.
 //   const selectedIsValid = values.room_options.some((o) => o.id === values.selected_option_id);
 
 //   return {
-//     consultation_date: values.consultation_date,
+//     counselling_date: values.counselling_date,
 //     patient_name: values.patient_name.trim(),
 //     age: values.age.trim() ? Number(values.age) : null,
 //     sex: values.sex || null,
@@ -209,16 +209,16 @@
 // /* Validation & formatting                                             */
 // /* ------------------------------------------------------------------ */
 
-// export interface ConsultationFormErrors {
+// export interface CounsellingFormErrors {
 //   patient_name?: string;
-//   consultation_date?: string;
+//   counselling_date?: string;
 //   amount?: string;
 // }
 
-// export function validateConsultationForm(values: ConsultationFormValues): ConsultationFormErrors {
-//   const errors: ConsultationFormErrors = {};
+// export function validateCounsellingForm(values: CounsellingFormValues): CounsellingFormErrors {
+//   const errors: CounsellingFormErrors = {};
 //   if (!values.patient_name.trim()) errors.patient_name = "Patient name is required.";
-//   if (!values.consultation_date.trim()) errors.consultation_date = "Consultation date is required.";
+//   if (!values.counselling_date.trim()) errors.counselling_date = "Counselling date is required.";
 //   if (values.amount.trim() && !Number.isFinite(Number(values.amount))) {
 //     errors.amount = "Amount must be a number.";
 //   }
@@ -236,7 +236,7 @@
 
 import type { Json, Tables } from "@/integrations/supabase/types";
 
-export type ConsultationRow = Tables<"consultations">;
+export type CounsellingRow = Tables<"counselling">;
 
 /* ------------------------------------------------------------------ */
 /* Payment type                                                        */
@@ -322,8 +322,8 @@ export function formatAmount(value: string): string {
 /* Form values                                                         */
 /* ------------------------------------------------------------------ */
 
-export interface ConsultationFormValues {
-  consultation_date: string;
+export interface CounsellingFormValues {
+  counselling_date: string;
   patient_name: string;
   age: string;
   sex: string;
@@ -337,9 +337,9 @@ export interface ConsultationFormValues {
   selected_option_id: string;
 }
 
-export function emptyConsultationForm(): ConsultationFormValues {
+export function emptyCounsellingForm(): CounsellingFormValues {
   return {
-    consultation_date: "",
+    counselling_date: "",
     patient_name: "",
     age: "",
     sex: "",
@@ -405,9 +405,9 @@ function normalizeRoomOptions(raw: unknown): RoomOption[] {
   });
 }
 
-export function consultationRowToForm(row: ConsultationRow): ConsultationFormValues {
+export function counsellingRowToForm(row: CounsellingRow): CounsellingFormValues {
   return {
-    consultation_date: row.consultation_date?.slice(0, 10) ?? "",
+    counselling_date: row.counselling_date?.slice(0, 10) ?? "",
     patient_name: row.patient_name ?? "",
     age: row.age != null ? String(row.age) : "",
     sex: row.sex ?? "",
@@ -425,14 +425,14 @@ export function consultationRowToForm(row: ConsultationRow): ConsultationFormVal
 /**
  * Shapes the form values into the exact columns the DB expects.
  * Shared by the "new" and "edit" pages so they never drift apart.
- * (The legacy consultation-level `amount` column is left untouched and unused;
+ * (The legacy counselling-level `amount` column is left untouched and unused;
  * amounts now live inside each room option.)
  */
-export function consultationFormToRow(values: ConsultationFormValues) {
+export function counsellingFormToRow(values: CounsellingFormValues) {
   const selectedIsValid = values.room_options.some((o) => o.id === values.selected_option_id);
 
   return {
-    consultation_date: values.consultation_date,
+    counselling_date: values.counselling_date,
     patient_name: values.patient_name.trim(),
     age: values.age.trim() ? Number(values.age) : null,
     sex: values.sex || null,
@@ -451,15 +451,15 @@ export function consultationFormToRow(values: ConsultationFormValues) {
 /* Validation & formatting                                             */
 /* ------------------------------------------------------------------ */
 
-export interface ConsultationFormErrors {
+export interface CounsellingFormErrors {
   patient_name?: string;
-  consultation_date?: string;
+  counselling_date?: string;
 }
 
-export function validateConsultationForm(values: ConsultationFormValues): ConsultationFormErrors {
-  const errors: ConsultationFormErrors = {};
+export function validateCounsellingForm(values: CounsellingFormValues): CounsellingFormErrors {
+  const errors: CounsellingFormErrors = {};
   if (!values.patient_name.trim()) errors.patient_name = "Patient name is required.";
-  if (!values.consultation_date.trim()) errors.consultation_date = "Consultation date is required.";
+  if (!values.counselling_date.trim()) errors.counselling_date = "Counselling date is required.";
   return errors;
 }
 

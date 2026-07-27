@@ -16,9 +16,9 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedChecklistIndexRouteImport } from './routes/_authenticated/checklist.index'
 import { Route as AuthenticatedChecklistIdRouteImport } from './routes/_authenticated/checklist.$id'
 import { Route as AuthenticatedChecklistNewRouteImport } from './routes/_authenticated/checklist.new'
-import { Route as AuthenticatedConsultationsIndexRouteImport } from './routes/_authenticated/consultations.index'
-import { Route as AuthenticatedConsultationsIdRouteImport } from './routes/_authenticated/consultations.$id'
-import { Route as AuthenticatedConsultationsNewRouteImport } from './routes/_authenticated/consultations.new'
+import { Route as AuthenticatedCounsellingIndexRouteImport } from './routes/_authenticated/counselling.index'
+import { Route as AuthenticatedCounsellingIdRouteImport } from './routes/_authenticated/counselling.$id'
+import { Route as AuthenticatedCounsellingNewRouteImport } from './routes/_authenticated/counselling.new'
 import { Route as AuthenticatedEddIndexRouteImport } from './routes/_authenticated/edd.index'
 import { Route as AuthenticatedEddIdRouteImport } from './routes/_authenticated/edd.$id'
 import { Route as AuthenticatedEddNewRouteImport } from './routes/_authenticated/edd.new'
@@ -60,22 +60,22 @@ const AuthenticatedChecklistNewRoute =
     path: '/checklist/new',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedConsultationsIndexRoute =
-  AuthenticatedConsultationsIndexRouteImport.update({
-    id: '/consultations/',
-    path: '/consultations/',
+const AuthenticatedCounsellingIndexRoute =
+  AuthenticatedCounsellingIndexRouteImport.update({
+    id: '/counselling/',
+    path: '/counselling/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedConsultationsIdRoute =
-  AuthenticatedConsultationsIdRouteImport.update({
-    id: '/consultations/$id',
-    path: '/consultations/$id',
+const AuthenticatedCounsellingIdRoute =
+  AuthenticatedCounsellingIdRouteImport.update({
+    id: '/counselling/$id',
+    path: '/counselling/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedConsultationsNewRoute =
-  AuthenticatedConsultationsNewRouteImport.update({
-    id: '/consultations/new',
-    path: '/consultations/new',
+const AuthenticatedCounsellingNewRoute =
+  AuthenticatedCounsellingNewRouteImport.update({
+    id: '/counselling/new',
+    path: '/counselling/new',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedEddIndexRoute = AuthenticatedEddIndexRouteImport.update({
@@ -100,12 +100,12 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/checklist/new': typeof AuthenticatedChecklistNewRoute
-  '/consultations/$id': typeof AuthenticatedConsultationsIdRoute
-  '/consultations/new': typeof AuthenticatedConsultationsNewRoute
+  '/counselling/$id': typeof AuthenticatedCounsellingIdRoute
+  '/counselling/new': typeof AuthenticatedCounsellingNewRoute
   '/edd/$id': typeof AuthenticatedEddIdRoute
   '/edd/new': typeof AuthenticatedEddNewRoute
   '/checklist/': typeof AuthenticatedChecklistIndexRoute
-  '/consultations/': typeof AuthenticatedConsultationsIndexRoute
+  '/counselling/': typeof AuthenticatedCounsellingIndexRoute
   '/edd/': typeof AuthenticatedEddIndexRoute
 }
 export interface FileRoutesByTo {
@@ -114,12 +114,12 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/checklist/new': typeof AuthenticatedChecklistNewRoute
-  '/consultations/$id': typeof AuthenticatedConsultationsIdRoute
-  '/consultations/new': typeof AuthenticatedConsultationsNewRoute
+  '/counselling/$id': typeof AuthenticatedCounsellingIdRoute
+  '/counselling/new': typeof AuthenticatedCounsellingNewRoute
   '/edd/$id': typeof AuthenticatedEddIdRoute
   '/edd/new': typeof AuthenticatedEddNewRoute
   '/checklist': typeof AuthenticatedChecklistIndexRoute
-  '/consultations': typeof AuthenticatedConsultationsIndexRoute
+  '/counselling': typeof AuthenticatedCounsellingIndexRoute
   '/edd': typeof AuthenticatedEddIndexRoute
 }
 export interface FileRoutesById {
@@ -130,12 +130,12 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/checklist/$id': typeof AuthenticatedChecklistIdRoute
   '/_authenticated/checklist/new': typeof AuthenticatedChecklistNewRoute
-  '/_authenticated/consultations/$id': typeof AuthenticatedConsultationsIdRoute
-  '/_authenticated/consultations/new': typeof AuthenticatedConsultationsNewRoute
+  '/_authenticated/counselling/$id': typeof AuthenticatedCounsellingIdRoute
+  '/_authenticated/counselling/new': typeof AuthenticatedCounsellingNewRoute
   '/_authenticated/edd/$id': typeof AuthenticatedEddIdRoute
   '/_authenticated/edd/new': typeof AuthenticatedEddNewRoute
   '/_authenticated/checklist/': typeof AuthenticatedChecklistIndexRoute
-  '/_authenticated/consultations/': typeof AuthenticatedConsultationsIndexRoute
+  '/_authenticated/counselling/': typeof AuthenticatedCounsellingIndexRoute
   '/_authenticated/edd/': typeof AuthenticatedEddIndexRoute
 }
 export interface FileRouteTypes {
@@ -146,12 +146,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/checklist/$id'
     | '/checklist/new'
-    | '/consultations/$id'
-    | '/consultations/new'
+    | '/counselling/$id'
+    | '/counselling/new'
     | '/edd/$id'
     | '/edd/new'
     | '/checklist/'
-    | '/consultations/'
+    | '/counselling/'
     | '/edd/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -160,12 +160,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/checklist/$id'
     | '/checklist/new'
-    | '/consultations/$id'
-    | '/consultations/new'
+    | '/counselling/$id'
+    | '/counselling/new'
     | '/edd/$id'
     | '/edd/new'
     | '/checklist'
-    | '/consultations'
+    | '/counselling'
     | '/edd'
   id:
     | '__root__'
@@ -175,12 +175,12 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/checklist/$id'
     | '/_authenticated/checklist/new'
-    | '/_authenticated/consultations/$id'
-    | '/_authenticated/consultations/new'
+    | '/_authenticated/counselling/$id'
+    | '/_authenticated/counselling/new'
     | '/_authenticated/edd/$id'
     | '/_authenticated/edd/new'
     | '/_authenticated/checklist/'
-    | '/_authenticated/consultations/'
+    | '/_authenticated/counselling/'
     | '/_authenticated/edd/'
   fileRoutesById: FileRoutesById
 }
@@ -241,25 +241,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChecklistNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/consultations/': {
-      id: '/_authenticated/consultations/'
-      path: '/consultations'
-      fullPath: '/consultations/'
-      preLoaderRoute: typeof AuthenticatedConsultationsIndexRouteImport
+    '/_authenticated/counselling/': {
+      id: '/_authenticated/counselling/'
+      path: '/counselling'
+      fullPath: '/counselling/'
+      preLoaderRoute: typeof AuthenticatedCounsellingIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/consultations/$id': {
-      id: '/_authenticated/consultations/$id'
-      path: '/consultations/$id'
-      fullPath: '/consultations/$id'
-      preLoaderRoute: typeof AuthenticatedConsultationsIdRouteImport
+    '/_authenticated/counselling/$id': {
+      id: '/_authenticated/counselling/$id'
+      path: '/counselling/$id'
+      fullPath: '/counselling/$id'
+      preLoaderRoute: typeof AuthenticatedCounsellingIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/consultations/new': {
-      id: '/_authenticated/consultations/new'
-      path: '/consultations/new'
-      fullPath: '/consultations/new'
-      preLoaderRoute: typeof AuthenticatedConsultationsNewRouteImport
+    '/_authenticated/counselling/new': {
+      id: '/_authenticated/counselling/new'
+      path: '/counselling/new'
+      fullPath: '/counselling/new'
+      preLoaderRoute: typeof AuthenticatedCounsellingNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/edd/': {
@@ -290,12 +290,12 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedChecklistIdRoute: typeof AuthenticatedChecklistIdRoute
   AuthenticatedChecklistNewRoute: typeof AuthenticatedChecklistNewRoute
-  AuthenticatedConsultationsIdRoute: typeof AuthenticatedConsultationsIdRoute
-  AuthenticatedConsultationsNewRoute: typeof AuthenticatedConsultationsNewRoute
+  AuthenticatedCounsellingIdRoute: typeof AuthenticatedCounsellingIdRoute
+  AuthenticatedCounsellingNewRoute: typeof AuthenticatedCounsellingNewRoute
   AuthenticatedEddIdRoute: typeof AuthenticatedEddIdRoute
   AuthenticatedEddNewRoute: typeof AuthenticatedEddNewRoute
   AuthenticatedChecklistIndexRoute: typeof AuthenticatedChecklistIndexRoute
-  AuthenticatedConsultationsIndexRoute: typeof AuthenticatedConsultationsIndexRoute
+  AuthenticatedCounsellingIndexRoute: typeof AuthenticatedCounsellingIndexRoute
   AuthenticatedEddIndexRoute: typeof AuthenticatedEddIndexRoute
 }
 
@@ -303,12 +303,12 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedChecklistIdRoute: AuthenticatedChecklistIdRoute,
   AuthenticatedChecklistNewRoute: AuthenticatedChecklistNewRoute,
-  AuthenticatedConsultationsIdRoute: AuthenticatedConsultationsIdRoute,
-  AuthenticatedConsultationsNewRoute: AuthenticatedConsultationsNewRoute,
+  AuthenticatedCounsellingIdRoute: AuthenticatedCounsellingIdRoute,
+  AuthenticatedCounsellingNewRoute: AuthenticatedCounsellingNewRoute,
   AuthenticatedEddIdRoute: AuthenticatedEddIdRoute,
   AuthenticatedEddNewRoute: AuthenticatedEddNewRoute,
   AuthenticatedChecklistIndexRoute: AuthenticatedChecklistIndexRoute,
-  AuthenticatedConsultationsIndexRoute: AuthenticatedConsultationsIndexRoute,
+  AuthenticatedCounsellingIndexRoute: AuthenticatedCounsellingIndexRoute,
   AuthenticatedEddIndexRoute: AuthenticatedEddIndexRoute,
 }
 

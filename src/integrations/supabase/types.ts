@@ -44,12 +44,12 @@ export type Database = {
         }
         Relationships: []
       }
-      consultations: {
+      counselling: {
         Row: {
           age: number | null
           amount: number | null
           cmrf: boolean
-          consultation_date: string
+          counselling_date: string
           created_at: string
           created_by: string
           id: string
@@ -68,7 +68,7 @@ export type Database = {
           age?: number | null
           amount?: number | null
           cmrf?: boolean
-          consultation_date: string
+          counselling_date: string
           created_at?: string
           created_by: string
           id?: string
@@ -87,7 +87,7 @@ export type Database = {
           age?: number | null
           amount?: number | null
           cmrf?: boolean
-          consultation_date?: string
+          counselling_date?: string
           created_at?: string
           created_by?: string
           id?: string
@@ -145,7 +145,7 @@ export type Database = {
       }
       profiles: {
         Row: {
-          can_consultations: boolean | null
+          can_counselling: boolean | null
           can_edd: boolean
           can_use_ot_handover_checklist: boolean | null
           created_at: string | null
@@ -155,7 +155,7 @@ export type Database = {
           role: string | null
         }
         Insert: {
-          can_consultations?: boolean | null
+          can_counselling?: boolean | null
           can_edd?: boolean
           can_use_ot_handover_checklist?: boolean | null
           created_at?: string | null
@@ -165,7 +165,7 @@ export type Database = {
           role?: string | null
         }
         Update: {
-          can_consultations?: boolean | null
+          can_counselling?: boolean | null
           can_edd?: boolean
           can_use_ot_handover_checklist?: boolean | null
           created_at?: string | null
