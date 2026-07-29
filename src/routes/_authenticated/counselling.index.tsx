@@ -127,9 +127,7 @@ function CounsellingList() {
             <Share2 className="h-4 w-4" />
             Share summary
           </CardTitle>
-          <CardDescription>
-            Share a WhatsApp-ready summary (name, phone, age, surgery) for the selected period.
-          </CardDescription>
+      
         </CardHeader>
         <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex gap-2">
