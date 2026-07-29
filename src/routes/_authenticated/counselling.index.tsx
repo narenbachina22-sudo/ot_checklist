@@ -13,9 +13,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Stethoscope, Plus, Search, Loader2 } from "lucide-react";
+import { Stethoscope, Plus, Search, Loader2, Share2 } from "lucide-react";
 import { requireProfilePermission } from "@/lib/permissions";
-import { formatDateOnly } from "@/lib/counselling";
+import {
+  formatDateOnly,
+  buildWhatsAppSummary,
+  summaryPeriodRange,
+  SUMMARY_PERIODS,
+  SUMMARY_PERIOD_LABELS,
+  type SummaryPeriod,
+  type CounsellingSummaryRow,
+} from "@/lib/counselling";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/counselling/")({
   beforeLoad: ({ context }) => {
@@ -39,6 +48,33 @@ interface CounsellingRow {
 
 function CounsellingList() {
   const [search, setSearch] = useState("");
+  const [summaryPeriod, setSummaryPeriod] = useState<SummaryPeriod>("day");
+
+  const { data: summaryData, isFetching: summaryLoading } = useQuery({
+    queryKey: ["counselling-summary", summaryPeriod],
+    queryFn: async () => {
+      const range = summaryPeriodRange(summaryPeriod);
+      const { data, error } = await supabase
+        .from("counselling")
+        .select("patient_name, phone, age, surgery_name")
+        .gte("counselling_date", range.start)
+        .lt("counselling_date", range.end)
+        .order("patient_name");
+      if (error) throw error;
+      return { rows: (data ?? []) as CounsellingSummaryRow[], range };
+    },
+  });
+
+  const summaryRows = summaryData?.rows ?? [];
+
+  function handleShareSummary() {
+    if (!summaryData || summaryRows.length === 0) {
+      toast.error("No counsellings found for this period.");
+      return;
+    }
+    const text = buildWhatsAppSummary(summaryRows, summaryData.range.label);
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: ["counselling", search],
@@ -84,6 +120,41 @@ function CounsellingList() {
           </Link>
         </Button>
       </div>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Share2 className="h-4 w-4" />
+            Share summary
+          </CardTitle>
+          <CardDescription>
+            Share a WhatsApp-ready summary (name, phone, age, surgery) for the selected period.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex gap-2">
+            {SUMMARY_PERIODS.map((p) => (
+              <Button
+                key={p}
+                type="button"
+                variant={summaryPeriod === p ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSummaryPeriod(p)}
+              >
+                {SUMMARY_PERIOD_LABELS[p]}
+              </Button>
+            ))}
+          </div>
+          <Button onClick={handleShareSummary} disabled={summaryLoading}>
+            {summaryLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Share2 className="mr-2 h-4 w-4" />
+            )}
+            Share on WhatsApp{summaryRows.length > 0 ? ` (${summaryRows.length})` : ""}
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader className="pb-3">

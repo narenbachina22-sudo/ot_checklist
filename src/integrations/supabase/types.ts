@@ -106,6 +106,7 @@ export type Database = {
       }
       edd_records: {
         Row: {
+          address: string | null
           age: number | null
           created_at: string
           created_by: string
@@ -114,10 +115,12 @@ export type Database = {
           lmp: string
           notes: string | null
           patient_name: string
+          phone: string | null
           sex: string | null
           updated_at: string
         }
         Insert: {
+          address?: string | null
           age?: number | null
           created_at?: string
           created_by: string
@@ -126,10 +129,12 @@ export type Database = {
           lmp: string
           notes?: string | null
           patient_name: string
+          phone?: string | null
           sex?: string | null
           updated_at?: string
         }
         Update: {
+          address?: string | null
           age?: number | null
           created_at?: string
           created_by?: string
@@ -138,6 +143,7 @@ export type Database = {
           lmp?: string
           notes?: string | null
           patient_name?: string
+          phone?: string | null
           sex?: string | null
           updated_at?: string
         }

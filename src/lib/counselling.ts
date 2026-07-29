@@ -471,3 +471,79 @@ export function formatDateOnly(value: string): string {
   if (!y || !m || !d) return value;
   return new Date(y, m - 1, d).toLocaleDateString();
 }
+
+/* ------------------------------------------------------------------ */
+/* WhatsApp summary sharing                                            */
+/* ------------------------------------------------------------------ */
+
+export const SUMMARY_PERIODS = ["day", "week", "month"] as const;
+export type SummaryPeriod = (typeof SUMMARY_PERIODS)[number];
+
+export const SUMMARY_PERIOD_LABELS: Record<SummaryPeriod, string> = {
+  day: "Today",
+  week: "This Week",
+  month: "This Month",
+};
+
+function pad2(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
+function toDateOnlyStr(d: Date): string {
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+}
+
+/** Half-open date range [start, end) for the given period, anchored on today. */
+export function summaryPeriodRange(period: SummaryPeriod): {
+  start: string;
+  end: string;
+  label: string;
+} {
+  const today = new Date();
+
+  if (period === "day") {
+    const start = toDateOnlyStr(today);
+    const end = toDateOnlyStr(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
+    return { start, end, label: formatDateOnly(start) };
+  }
+
+  if (period === "week") {
+    const dow = today.getDay(); // 0 = Sunday
+    const diffToMonday = dow === 0 ? 6 : dow - 1;
+    const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - diffToMonday);
+    const weekEnd = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 7);
+    const weekLastDay = new Date(weekEnd.getFullYear(), weekEnd.getMonth(), weekEnd.getDate() - 1);
+    const start = toDateOnlyStr(weekStart);
+    const end = toDateOnlyStr(weekEnd);
+    return { start, end, label: `${formatDateOnly(start)} – ${formatDateOnly(toDateOnlyStr(weekLastDay))}` };
+  }
+
+  // month
+  const y = today.getFullYear();
+  const m = today.getMonth();
+  const start = `${y}-${pad2(m + 1)}-01`;
+  const nextMonth = m === 11 ? 0 : m + 1;
+  const nextYear = m === 11 ? y + 1 : y;
+  const end = `${nextYear}-${pad2(nextMonth + 1)}-01`;
+  return { start, end, label: today.toLocaleDateString(undefined, { month: "long", year: "numeric" }) };
+}
+
+export interface CounsellingSummaryRow {
+  patient_name: string;
+  phone: string | null;
+  age: number | null;
+  surgery_name: string | null;
+}
+
+/** Builds a plain-text WhatsApp-ready summary: name, phone, age, surgery per patient. */
+export function buildWhatsAppSummary(rows: CounsellingSummaryRow[], periodLabel: string): string {
+  const lines = [`Counselling Summary – ${periodLabel}`, `Total: ${rows.length}`, ""];
+  rows.forEach((row, i) => {
+    const parts = [row.patient_name || "—"];
+    if (row.age != null) parts.push(`${row.age}y`);
+    if (row.phone) parts.push(row.phone);
+    if (row.surgery_name) parts.push(row.surgery_name);
+    lines.push(`${i + 1}. ${parts.join(" | ")}`);
+  });
+  return lines.join("\n");
+}

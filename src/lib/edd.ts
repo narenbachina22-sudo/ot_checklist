@@ -10,12 +10,14 @@ export interface EddFormValues {
   patient_name: string;
   age: string;
   sex: string;
+  phone: string;
+  address: string;
   lmp: string; // last menstrual period, "YYYY-MM-DD"
   notes: string;
 }
 
 export function emptyEddForm(): EddFormValues {
-  return { patient_name: "", age: "", sex: "", lmp: "", notes: "" };
+  return { patient_name: "", age: "", sex: "", phone: "", address: "", lmp: "", notes: "" };
 }
 
 export function eddRowToForm(row: EddRow): EddFormValues {
@@ -23,6 +25,8 @@ export function eddRowToForm(row: EddRow): EddFormValues {
     patient_name: row.patient_name ?? "",
     age: row.age != null ? String(row.age) : "",
     sex: row.sex ?? "",
+    phone: row.phone ?? "",
+    address: row.address ?? "",
     lmp: row.lmp?.slice(0, 10) ?? "",
     notes: row.notes ?? "",
   };
@@ -55,6 +59,8 @@ export function eddFormToRow(values: EddFormValues) {
     patient_name: values.patient_name.trim(),
     age: values.age.trim() ? Number(values.age) : null,
     sex: values.sex || null,
+    phone: values.phone.trim() || null,
+    address: values.address.trim() || null,
     lmp: values.lmp,
     edd: calcEdd(values.lmp),
     notes: values.notes.trim() || null,

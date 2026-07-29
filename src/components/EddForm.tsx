@@ -84,6 +84,29 @@ export function EddForm({ value, onChange, errors, readOnly = false }: Props) {
         </div>
 
         <div className="space-y-1">
+          <Label htmlFor="phone">Phone</Label>
+          <Input
+            id="phone"
+            type="tel"
+            value={value.phone}
+            onChange={(e) => set("phone", e.target.value)}
+            placeholder="Phone number"
+            disabled={readOnly}
+          />
+        </div>
+
+        <div className="space-y-1">
+          <Label htmlFor="address">Address</Label>
+          <Input
+            id="address"
+            value={value.address}
+            onChange={(e) => set("address", e.target.value)}
+            placeholder="Address"
+            disabled={readOnly}
+          />
+        </div>
+
+        <div className="space-y-1">
           <Label htmlFor="lmp">Last Menstrual Period (LMP)</Label>
           <Input
             id="lmp"
