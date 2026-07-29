@@ -58,6 +58,7 @@ export type Database = {
           patient_name: string
           payment_type: string | null
           phone: string | null
+          procedure_type: string | null
           room_options: Json
           selected_option_id: string | null
           sex: string | null
@@ -77,6 +78,7 @@ export type Database = {
           patient_name: string
           payment_type?: string | null
           phone?: string | null
+          procedure_type?: string | null
           room_options?: Json
           selected_option_id?: string | null
           sex?: string | null
@@ -96,6 +98,7 @@ export type Database = {
           patient_name?: string
           payment_type?: string | null
           phone?: string | null
+          procedure_type?: string | null
           room_options?: Json
           selected_option_id?: string | null
           sex?: string | null

@@ -246,6 +246,13 @@ export const PAYMENT_TYPES = ["Insurance", "Non-insurance"] as const;
 export type PaymentType = (typeof PAYMENT_TYPES)[number];
 
 /* ------------------------------------------------------------------ */
+/* Procedure type                                                      */
+/* ------------------------------------------------------------------ */
+
+export const PROCEDURE_TYPES = ["OPD Procedure", "IP Procedure"] as const;
+export type ProcedureType = (typeof PROCEDURE_TYPES)[number];
+
+/* ------------------------------------------------------------------ */
 /* Room options                                                        */
 /* ------------------------------------------------------------------ */
 
@@ -282,7 +289,8 @@ export interface CustomFeature {
 export interface RoomOption {
   id: string;
   room_type: RoomType | "";
-  amount: string; // price for this option
+  amount_min: string; // lower bound of the estimated price range
+  amount_max: string; // upper bound of the estimated price range
   // Which of the six standard features are included in this option.
   features: RoomFeatureKey[];
   // Extra name-only features not in the standard six.
@@ -300,7 +308,8 @@ export function newRoomOption(room_type: RoomType | "" = ""): RoomOption {
   return {
     id: makeId(),
     room_type,
-    amount: "",
+    amount_min: "",
+    amount_max: "",
     features: [],
     custom_features: [],
   };
@@ -318,6 +327,14 @@ export function formatAmount(value: string): string {
   return Number.isFinite(n) ? `₹${n.toLocaleString("en-IN")}` : `₹${trimmed}`;
 }
 
+/** Formats an amount range as "₹25,000 – ₹35,000"; falls back gracefully if one side is blank. */
+export function formatAmountRange(min: string, max: string): string {
+  const minLabel = formatAmount(min);
+  const maxLabel = formatAmount(max);
+  if (minLabel && maxLabel) return `${minLabel} – ${maxLabel}`;
+  return minLabel || maxLabel;
+}
+
 /* ------------------------------------------------------------------ */
 /* Form values                                                         */
 /* ------------------------------------------------------------------ */
@@ -331,6 +348,7 @@ export interface CounsellingFormValues {
   location: string;
   notes: string;
   surgery_name: string;
+  procedure_type: string;
   payment_type: string;
   cmrf: boolean;
   room_options: RoomOption[];
@@ -347,6 +365,7 @@ export function emptyCounsellingForm(): CounsellingFormValues {
     location: "",
     notes: "",
     surgery_name: "",
+    procedure_type: "",
     payment_type: "",
     cmrf: false,
     room_options: [],
@@ -395,10 +414,13 @@ function normalizeRoomOptions(raw: unknown): RoomOption[] {
       : [];
 
     const rt = obj.room_type;
+    // Older rows stored a single `amount`; fall back to it for both ends of the range.
+    const legacyAmount = obj.amount == null ? "" : String(obj.amount);
     return {
       id: typeof obj.id === "string" ? obj.id : makeId(),
       room_type: ROOM_TYPES.includes(rt as RoomType) ? (rt as RoomType) : "",
-      amount: obj.amount == null ? "" : String(obj.amount),
+      amount_min: obj.amount_min == null ? legacyAmount : String(obj.amount_min),
+      amount_max: obj.amount_max == null ? legacyAmount : String(obj.amount_max),
       features,
       custom_features,
     };
@@ -415,6 +437,7 @@ export function counsellingRowToForm(row: CounsellingRow): CounsellingFormValues
     location: row.location ?? "",
     notes: row.notes ?? "",
     surgery_name: row.surgery_name ?? "",
+    procedure_type: row.procedure_type ?? "",
     payment_type: row.payment_type ?? "",
     cmrf: row.cmrf ?? false,
     room_options: normalizeRoomOptions(row.room_options),
@@ -440,6 +463,7 @@ export function counsellingFormToRow(values: CounsellingFormValues) {
     location: values.location.trim() || null,
     notes: values.notes.trim() || null,
     surgery_name: values.surgery_name.trim() || null,
+    procedure_type: values.procedure_type || null,
     payment_type: values.payment_type || null,
     cmrf: values.cmrf,
     room_options: values.room_options as unknown as Json,

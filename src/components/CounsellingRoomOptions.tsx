@@ -353,7 +353,7 @@ import {
 import { BedDouble, Check, ChevronDown, Plus, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
-  formatAmount,
+  formatAmountRange,
   newCustomFeature,
   newRoomOption,
   ROOM_FEATURE_KEYS,
@@ -478,7 +478,7 @@ export function CounsellingRoomOptions({
             const isExpanded = expanded[option.id] ?? false;
             const featureCount = option.features.length + option.custom_features.length;
             const nothingAdded = featureCount === 0;
-            const amountLabel = formatAmount(option.amount);
+            const amountRangeLabel = formatAmountRange(option.amount_min, option.amount_max);
             return (
               <div
                 key={option.id}
@@ -507,9 +507,6 @@ export function CounsellingRoomOptions({
                       <span className="truncate text-sm text-muted-foreground">
                         · {option.room_type}
                       </span>
-                    )}
-                    {amountLabel && (
-                      <span className="shrink-0 text-sm font-medium">· {amountLabel}</span>
                     )}
                     {featureCount > 0 && (
                       <span className="shrink-0 text-xs text-muted-foreground">
@@ -563,16 +560,37 @@ export function CounsellingRoomOptions({
                       </div>
 
                       <div className="space-y-1">
-                        <Label htmlFor={`${option.id}-amount`}>Amount (₹)</Label>
-                        <Input
-                          id={`${option.id}-amount`}
-                          type="text"
-                          inputMode="decimal"
-                          value={option.amount}
-                          placeholder="0"
-                          disabled={readOnly}
-                          onChange={(e) => updateOption(option.id, { amount: e.target.value })}
-                        />
+                        <Label>Amount range (₹)</Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            id={`${option.id}-amount-min`}
+                            type="text"
+                            inputMode="decimal"
+                            value={option.amount_min}
+                            placeholder="Min"
+                            disabled={readOnly}
+                            aria-label="Minimum amount"
+                            onChange={(e) =>
+                              updateOption(option.id, { amount_min: e.target.value })
+                            }
+                          />
+                          <span className="shrink-0 text-sm text-muted-foreground">to</span>
+                          <Input
+                            id={`${option.id}-amount-max`}
+                            type="text"
+                            inputMode="decimal"
+                            value={option.amount_max}
+                            placeholder="Max"
+                            disabled={readOnly}
+                            aria-label="Maximum amount"
+                            onChange={(e) =>
+                              updateOption(option.id, { amount_max: e.target.value })
+                            }
+                          />
+                        </div>
+                        {amountRangeLabel && (
+                          <p className="text-xs text-muted-foreground">{amountRangeLabel}</p>
+                        )}
                       </div>
                     </div>
 

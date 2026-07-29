@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import {
   PAYMENT_TYPES,
+  PROCEDURE_TYPES,
   type CounsellingFormErrors,
   type CounsellingFormValues,
 } from "@/lib/counselling";
@@ -135,6 +136,26 @@ export function CounsellingForm({ value, onChange, errors, readOnly = false }: P
               placeholder="e.g. Appendectomy"
               disabled={readOnly}
             />
+          </div>
+
+          <div className="space-y-1">
+            <Label htmlFor="procedure_type">Procedure Type</Label>
+            <Select
+              value={value.procedure_type || undefined}
+              onValueChange={(v) => set("procedure_type", v)}
+              disabled={readOnly}
+            >
+              <SelectTrigger id="procedure_type">
+                <SelectValue placeholder="Select…" />
+              </SelectTrigger>
+              <SelectContent>
+                {PROCEDURE_TYPES.map((p) => (
+                  <SelectItem key={p} value={p}>
+                    {p}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-1">
