@@ -13,11 +13,21 @@ export interface EddFormValues {
   phone: string;
   address: string;
   lmp: string; // last menstrual period, "YYYY-MM-DD"
+  last_visit_date: string;
   notes: string;
 }
 
 export function emptyEddForm(): EddFormValues {
-  return { patient_name: "", age: "", sex: "", phone: "", address: "", lmp: "", notes: "" };
+  return {
+    patient_name: "",
+    age: "",
+    sex: "",
+    phone: "",
+    address: "",
+    lmp: "",
+    last_visit_date: "",
+    notes: "",
+  };
 }
 
 export function eddRowToForm(row: EddRow): EddFormValues {
@@ -28,6 +38,7 @@ export function eddRowToForm(row: EddRow): EddFormValues {
     phone: row.phone ?? "",
     address: row.address ?? "",
     lmp: row.lmp?.slice(0, 10) ?? "",
+    last_visit_date: row.last_visit_date?.slice(0, 10) ?? "",
     notes: row.notes ?? "",
   };
 }
@@ -63,6 +74,7 @@ export function eddFormToRow(values: EddFormValues) {
     address: values.address.trim() || null,
     lmp: values.lmp,
     edd: calcEdd(values.lmp),
+    last_visit_date: values.last_visit_date || null,
     notes: values.notes.trim() || null,
   };
 }

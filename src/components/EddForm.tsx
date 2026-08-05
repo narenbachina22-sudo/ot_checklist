@@ -129,6 +129,17 @@ export function EddForm({ value, onChange, errors, readOnly = false }: Props) {
           </p>
         </div>
 
+        <div className="space-y-1">
+          <Label htmlFor="last_visit_date">Last Visit Date</Label>
+          <Input
+            id="last_visit_date"
+            type="date"
+            value={value.last_visit_date}
+            onChange={(e) => set("last_visit_date", e.target.value)}
+            disabled={readOnly}
+          />
+        </div>
+
         <div className="space-y-1 sm:col-span-2">
           <Label htmlFor="notes">Notes</Label>
           <Textarea

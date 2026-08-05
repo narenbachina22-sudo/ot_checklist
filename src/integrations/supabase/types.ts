@@ -115,6 +115,7 @@ export type Database = {
           created_by: string
           edd: string
           id: string
+          last_visit_date: string | null
           lmp: string
           notes: string | null
           patient_name: string
@@ -129,6 +130,7 @@ export type Database = {
           created_by: string
           edd: string
           id?: string
+          last_visit_date?: string | null
           lmp: string
           notes?: string | null
           patient_name: string
@@ -143,6 +145,7 @@ export type Database = {
           created_by?: string
           edd?: string
           id?: string
+          last_visit_date?: string | null
           lmp?: string
           notes?: string | null
           patient_name?: string
